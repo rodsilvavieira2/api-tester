@@ -1,0 +1,92 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "jest": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "standard",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:jsx-a11y/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint",
+        "react-hooks",
+        "eslint-plugin-import-helpers"
+    ],
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
+    "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "camelcase": "off",
+        "import/no-duplicates": "off",
+        "react/react-in-jsx-scope": "off",
+        "import/extensions": "off",
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": [
+            "error"
+        ],
+        "react/prop-types": "off",
+        "react/jsx-props-no-spreading": "off",
+        "jsx-a11y/anchor-is-valid": [
+            "error",
+            {
+                "components": [
+                    "Link"
+                ],
+                "specialLink": [
+                    "hrefLeft",
+                    "hrefRight"
+                ],
+                "aspects": [
+                    "invalidHref",
+                    "preferButton"
+                ]
+            }
+        ],
+        "@typescript-eslint/no-explicit-any": "off",
+        "import-helpers/order-imports": [
+            "warn",
+            {
+                "newlinesBetween": "always",
+                "groups": [
+                    "module",
+                    "/^@/",
+                    [
+                        "parent",
+                        "sibling",
+                        "index"
+                    ]
+                ],
+                "alphabetize": {
+                    "order": "asc",
+                    "ignoreCase": true
+                }
+            }
+        ],
+        "react/jsx-one-expression-per-line": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".tsx"
+                ]
+            }
+        ]
+    }
+}
