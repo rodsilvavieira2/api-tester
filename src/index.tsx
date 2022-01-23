@@ -1,4 +1,4 @@
-import React from 'react'
+import { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
 
 import { ChakraProvider } from '@chakra-ui/react'
@@ -7,10 +7,10 @@ import { App } from './App'
 import { customTheme } from './styles'
 
 ReactDOM.render(
-  <React.StrictMode>
+  <StrictMode>
     <ChakraProvider theme={customTheme}>
       <App />
     </ChakraProvider>
-  </React.StrictMode>,
+  </StrictMode>,
   document.getElementById('root')
 )

@@ -1,9 +1,7 @@
-import { Box } from '@chakra-ui/react'
+import AuthenticationPage from './pages/authentication'
 
 export const App = () => {
   return (
-    <Box w="100%" minH="5" bg="red">
-      test
-    </Box>
+   <AuthenticationPage />
   )
 }

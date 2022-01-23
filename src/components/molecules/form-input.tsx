@@ -1,21 +1,34 @@
-import { forwardRef, ForwardRefRenderFunction } from 'react'
+import {
+  forwardRef,
+  ForwardRefRenderFunction,
+  ReactElement
+} from 'react'
 
 import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Input
+  Input,
+  InputGroup,
+  InputLeftElement
 } from '@chakra-ui/react'
 
 import { DefaultInputProps } from './molecules.types'
-const Base: ForwardRefRenderFunction<HTMLInputElement, DefaultInputProps> = (
-  { label, error = null, name, ...rest },
+
+type FormInputProps = { icon?: ReactElement } & DefaultInputProps
+
+const Base: ForwardRefRenderFunction<HTMLInputElement, FormInputProps> = (
+  { label, icon, error = null, name, ...rest },
   ref
 ) => {
   return (
     <FormControl isInvalid={!!error}>
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      <Input {...rest} {...rest} ref={ref} />
+      <InputGroup>
+        {icon && <InputLeftElement>{icon}</InputLeftElement>}
+
+        <Input {...rest} {...rest} ref={ref} id={name} name={name} />
+      </InputGroup>
       {error && <FormErrorMessage>{error.message}</FormErrorMessage>}
     </FormControl>
   )
