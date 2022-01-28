@@ -1,4 +1,3 @@
-import { AiOutlineSortAscending } from 'react-icons/ai'
 import { TiArrowUnsorted } from 'react-icons/ti'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -8,10 +7,7 @@ import {
   IconButton,
   MenuList,
   MenuOptionGroup,
-  MenuItemOption,
-  HStack,
-  Text,
-  Icon
+  MenuItemOption
 } from '@chakra-ui/react'
 
 import { SortBy } from '../../../../@types'

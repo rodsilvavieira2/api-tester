@@ -7,16 +7,20 @@ export const customTheme = extendTheme({
     highlight: '#CDF0EA',
     heading: '#24292d',
     text: 'rgb(116, 117, 125)',
+    border: {
+      primary: '#ced4da'
+    },
     background: {
-      primary:
-        'linear-gradient(180deg, rgba(117,121,231,1) 5%, rgba(156,182,244,1) 43%, rgba(205,240,234,1) 100%)'
+      primary: '#F7FAFC',
+      auth: 'linear-gradient(180deg, rgba(117,121,231,1) 5%, rgba(156,182,244,1) 43%, rgba(205,240,234,1) 100%)'
     }
   },
   styles: {
     global: {
       body: {
         fontFamily: "'Roboto', sans-serif",
-        color: 'text'
+        color: 'text',
+        bg: 'background.primary'
       }
     }
   },
@@ -53,7 +57,13 @@ export const customTheme = extendTheme({
     },
     Input: {
       defaultProps: {
-        bg: 'red.500'
+        bg: 'red.500',
+        focusBorderColor: 'primary'
+      }
+    },
+    ModalHeader: {
+      defaultProps: {
+        color: 'heading'
       }
     }
   }

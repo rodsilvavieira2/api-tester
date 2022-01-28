@@ -7,28 +7,39 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@hookform/resolvers": "^2.8.8",
+    "@reduxjs/toolkit": "^1.7.1",
+    "dayjs": "^1.10.7",
     "framer-motion": "^5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.25.0",
     "react-icons": "^4.3.1",
+    "react-redux": "^7.2.6",
     "react-router-dom": "6",
     "react-scripts": "5.0.0",
+    "react-virtualized": "^9.22.3",
+    "redux": "^4.1.2",
     "web-vitals": "^2.1.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-conventional": "^16.0.0",
+    "@mswjs/data": "^0.8.4",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
+    "@types/faker": "^6.6.9",
     "@types/jest": "^27.0.1",
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^16.7.13",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
+    "@types/react-redux": "^7.1.22",
+    "@types/react-virtualized": "^9.21.16",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
+    "casual": "^1.6.2",
     "commitizen": "^4.2.4",
     "cz-conventional-changelog": "3.3.0",
     "eslint": "^7.12.1",
@@ -41,6 +52,8 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "husky": "^7.0.4",
+    "jsonwebtoken": "^8.5.1",
+    "msw": "^0.36.5",
     "typescript": "^4.4.2"
   },
   "scripts": {
@@ -71,5 +84,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

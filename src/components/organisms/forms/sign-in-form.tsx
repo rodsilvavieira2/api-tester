@@ -18,7 +18,7 @@ import { FormInput } from '../../molecules'
 import { PasswordFormInput } from '../../molecules'
 import { formMessages } from './form.messages'
 
-type SignFormFormData = {
+export type SignFormFormData = {
   password: string
   email: string
 }
