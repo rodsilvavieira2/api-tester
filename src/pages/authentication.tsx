@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { Center, useToast } from '@chakra-ui/react'
@@ -17,6 +18,8 @@ export default function AuthenticationPage () {
   const [accessToken] = useLocalStorage(localStorageKeys.accessToken, null)
 
   const navigation = useNavigate()
+
+  const appDispatch = useDispatch()
 
   useEffect(() => {
     if (accessToken) navigation('/dashboard')

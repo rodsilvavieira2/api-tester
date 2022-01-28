@@ -22,6 +22,7 @@ import { formMessages } from './form.messages'
 export type SignFormFormData = {
   password: string
   email: string
+  rememberMe:boolean
 }
 
 const signFormValidation = yup.object().shape({
@@ -55,10 +56,10 @@ export const SignInForm = ({ onSubmit, onToggleMode }: SignFormProps) => {
         <Center p="10" flexDir="column" bg="secondary">
           <Image w="15rem" src="/assets/sign-in.svg" alt="teste suas apis" />
           <Box mt="3" textAlign="center">
-            <Heading color="white" as="h1" fontSize="lg">
+            <Heading color="white" as="h1" fontSize="1.6rem">
               Teste suas apis
             </Heading>
-            <Heading color="white" as="h2" fontSize="md">
+            <Heading color="white" as="h2" fontSize="1rem">
               de forma simples e rapida
             </Heading>
           </Box>
@@ -94,7 +95,7 @@ export const SignInForm = ({ onSubmit, onToggleMode }: SignFormProps) => {
               {...register('password')}
             />
             <Flex>
-              <Checkbox>Lembar de min ?</Checkbox>
+              <Checkbox {...register('rememberMe')} >Lembar de min ?</Checkbox>
             </Flex>
 
             <Button isLoading={isSubmitting} type="submit">

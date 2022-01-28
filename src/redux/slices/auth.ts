@@ -6,6 +6,7 @@ import { RootState } from '../store'
 
 type AuthInitialState = {
   user: User | null
+  shouldRememberMe:boolean
   tokens: {
     accessToken: string | null
     refreshToken: string | null
@@ -14,6 +15,7 @@ type AuthInitialState = {
 
 const initialState: AuthInitialState = {
   user: null,
+  shouldRememberMe: false,
   tokens: {
     accessToken: null,
     refreshToken: null
@@ -34,6 +36,9 @@ export const authSlice = createSlice({
     },
     logout: () => {
       return initialState
+    },
+    setShouldRememberMe: (state, action:PayloadAction<boolean>) => {
+      state.shouldRememberMe = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -51,4 +56,4 @@ export const authReducer = authSlice.reducer
 
 export const selectUser = (state: RootState) => state.auth.user
 
-export const { logout, setTokens } = authSlice.actions
+export const { logout, setTokens, setShouldRememberMe } = authSlice.actions
