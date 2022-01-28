@@ -54,7 +54,7 @@ export default function AuthenticationPage () {
   )
 
   return (
-    <Center bg="background.auth" w="100vw" minH="100vh">
+    <Center w="100vw" minH="100vh" >
       {isInSignUpMode
         ? (
         <SingUpForm onToggleMode={onToggleMode} onSubmit={handleSubmit} />

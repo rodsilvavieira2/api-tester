@@ -10,7 +10,8 @@ import {
   Image,
   Flex,
   Checkbox,
-  Heading
+  Heading,
+  SlideFade
 } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 
@@ -49,47 +50,63 @@ export const SignInForm = ({ onSubmit, onToggleMode }: SignFormProps) => {
   })
 
   return (
-    <Box bg="white" borderRadius="base" p="6" px="8" boxShadow="2xl" my="10">
-      <Center minH="7rem">
-        <Stack alignItems="center">
-          <Image
-            w="64px"
-            src="/assets/sign-in-form-icon.png"
-            alt="sign in icon"
-          />
+    <SlideFade in offsetY={40}>
+      <Flex bg="white" borderRadius="base" boxShadow="2xl" my="10">
+        <Center p="10" flexDir="column" bg="secondary">
+          <Image w="15rem" src="/assets/sign-in.svg" alt="teste suas apis" />
+          <Box mt="3" textAlign="center">
+            <Heading color="white" as="h1" fontSize="lg">
+              Teste suas apis
+            </Heading>
+            <Heading color="white" as="h2" fontSize="md">
+              de forma simples e rapida
+            </Heading>
+          </Box>
+        </Center>
 
-          <Heading as="h1" fontSize="2xl" fontWeight="600">
-            Sign in
-          </Heading>
-        </Stack>
-      </Center>
+        <Box p="10">
+          <Center minH="7rem">
+            <Stack alignItems="center">
+              <Image
+                w="64px"
+                src="/assets/sign-in-form-icon.png"
+                alt="sign in icon"
+              />
 
-      <Stack spacing="5" as="form" onSubmit={handleSubmit(onSubmit)}>
-        <FormInput
-          icon={<MdEmail />}
-          error={errors.email}
-          label="Email:"
-          type="email"
-          {...register('email')}
-        />
+              <Heading as="h1" fontSize="2xl" fontWeight="600">
+                Sign in
+              </Heading>
+            </Stack>
+          </Center>
 
-        <PasswordFormInput
-          error={errors.password}
-          label="Senha:"
-          {...register('password')}
-        />
-        <Flex>
-          <Checkbox>Lembar de min ?</Checkbox>
-        </Flex>
+          <Stack spacing="5" as="form" onSubmit={handleSubmit(onSubmit)}>
+            <FormInput
+              icon={<MdEmail />}
+              error={errors.email}
+              label="Email:"
+              type="email"
+              {...register('email')}
+            />
 
-        <Button isLoading={isSubmitting} type="submit">
-          Sign in
-        </Button>
+            <PasswordFormInput
+              error={errors.password}
+              label="Senha:"
+              {...register('password')}
+            />
+            <Flex>
+              <Checkbox>Lembar de min ?</Checkbox>
+            </Flex>
 
-        <Button onClick={onToggleMode} variant="link">
-          Não tem uma conta ?Sign up
-        </Button>
-      </Stack>
-    </Box>
+            <Button isLoading={isSubmitting} type="submit">
+              Sign in
+            </Button>
+
+            <Button onClick={onToggleMode} variant="link">
+              Não tem uma conta ?Sign up
+            </Button>
+          </Stack>
+        </Box>
+      </Flex>
+    </SlideFade>
   )
 }

@@ -1,13 +1,16 @@
 import { forwardRef, ForwardRefRenderFunction, useState } from 'react'
 import { HiEyeOff, HiEye } from 'react-icons/hi'
+import { MdLock } from 'react-icons/md'
 
 import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Icon,
   IconButton,
   Input,
   InputGroup,
+  InputLeftElement,
   InputRightElement
 } from '@chakra-ui/react'
 
@@ -26,6 +29,10 @@ const Base: ForwardRefRenderFunction<
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
 
       <InputGroup>
+        <InputLeftElement>
+          <Icon as={MdLock} />
+        </InputLeftElement>
+
         <Input
           id={name}
           name={name}

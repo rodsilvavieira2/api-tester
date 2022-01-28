@@ -51,55 +51,55 @@ export const SingUpForm = ({ onSubmit, onToggleMode }: SignFormProps) => {
   })
 
   return (
-    <Box bg="white" borderRadius="base" p="6" px="8" boxShadow="2xl">
-      <Center minH="7rem">
-        <Stack alignItems="center">
-          <Image
-            w="64px"
-            src="/assets/sign-up-form-icon.png"
-            alt="sign up icon"
+      <Box bg="white" borderRadius="base" p="6" px="8" boxShadow="2xl">
+        <Center minH="7rem">
+          <Stack alignItems="center">
+            <Image
+              w="64px"
+              src="/assets/sign-up-form-icon.png"
+              alt="sign up icon"
+            />
+
+            <Heading as="h1" fontSize="2xl" fontWeight="600">
+              Sign Up
+            </Heading>
+          </Stack>
+        </Center>
+
+        <Stack spacing="5" as="form" onSubmit={handleSubmit(onSubmit)}>
+          <FormInput
+            icon={<MdPerson />}
+            error={errors.email}
+            label="Nome Completo:"
+            type="text"
+            {...register('fullName')}
           />
 
-          <Heading as="h1" fontSize="2xl" fontWeight="600">
-            Sign Up
-          </Heading>
+          <FormInput
+            icon={<MdEmail />}
+            error={errors.email}
+            label="Email:"
+            type="email"
+            {...register('email')}
+          />
+
+          <PasswordFormInput
+            error={errors.password}
+            label="Senha:"
+            {...register('password')}
+          />
+          <Flex>
+            <Checkbox>Lembar de min ?</Checkbox>
+          </Flex>
+
+          <Button isLoading={isSubmitting} type="submit">
+            Sign in
+          </Button>
+
+          <Button onClick={onToggleMode} variant="link">
+            Já tem uma conta ?Sign in
+          </Button>
         </Stack>
-      </Center>
-
-      <Stack spacing="5" as="form" onSubmit={handleSubmit(onSubmit)}>
-        <FormInput
-          icon={<MdPerson />}
-          error={errors.email}
-          label="Nome Completo:"
-          type="text"
-          {...register('fullName')}
-        />
-
-        <FormInput
-          icon={<MdEmail />}
-          error={errors.email}
-          label="Email:"
-          type="email"
-          {...register('email')}
-        />
-
-        <PasswordFormInput
-          error={errors.password}
-          label="Senha:"
-          {...register('password')}
-        />
-        <Flex>
-          <Checkbox>Lembar de min ?</Checkbox>
-        </Flex>
-
-        <Button isLoading={isSubmitting} type="submit">
-          Sign in
-        </Button>
-
-        <Button onClick={onToggleMode} variant="link">
-          Já tem uma conta ?Sign in
-        </Button>
-      </Stack>
-    </Box>
+      </Box>
   )
 }
