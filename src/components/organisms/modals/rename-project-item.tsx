@@ -29,18 +29,15 @@ const Content = ({ projectItemName, id, onClose }: ContentProps) => {
   const toast = useToast()
 
   const onRename = async () => {
+    const toastID = toast({
+      title: 'Renomear item do projeto',
+      description: 'Processando...',
+      variant: 'left-accent',
+      isClosable: false,
+      status: 'info'
+    })
     try {
-      const toastID = toast({
-        title: 'Renomear item do projeto',
-        description: 'Processando...',
-        variant: 'left-accent',
-        isClosable: false,
-        status: 'info'
-      })
-
       await updateProjectItem({ name: newName, id }).unwrap()
-
-      if (toastID) toast.close(toastID)
 
       toast({
         title: 'Renomear item do projeto',
@@ -59,6 +56,8 @@ const Content = ({ projectItemName, id, onClose }: ContentProps) => {
         isClosable: true,
         status: 'error'
       })
+    } finally {
+      if (toastID) toast.close(toastID)
     }
   }
 

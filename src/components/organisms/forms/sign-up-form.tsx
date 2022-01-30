@@ -24,6 +24,7 @@ export type SingUpFormFormData = {
   fullName: string
   password: string
   email: string
+  rememberMe: boolean
 }
 
 const singUpFormValidation = yup.object().shape({
@@ -49,7 +50,10 @@ export const SingUpForm = ({ onSubmit, onToggleMode }: SignFormProps) => {
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm<SingUpFormFormData>({
-    resolver: yupResolver(singUpFormValidation)
+    resolver: yupResolver(singUpFormValidation),
+    defaultValues: {
+      rememberMe: true
+    }
   })
 
   return (
@@ -95,7 +99,7 @@ export const SingUpForm = ({ onSubmit, onToggleMode }: SignFormProps) => {
               {...register('password')}
             />
             <Flex>
-              <Checkbox>Lembar de min ?</Checkbox>
+              <Checkbox {...register('rememberMe')} >Lembar de min ?</Checkbox>
             </Flex>
 
             <Button isLoading={isSubmitting} type="submit">

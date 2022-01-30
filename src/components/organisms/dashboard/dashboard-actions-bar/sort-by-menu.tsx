@@ -33,7 +33,7 @@ export const SortByMenu = () => {
 
           <MenuItemOption value="ascending">Crescente</MenuItemOption>
 
-          <MenuItemOption value="descending">Decrescente (Z-a)</MenuItemOption>
+          <MenuItemOption value="descending">Decrescente</MenuItemOption>
         </MenuOptionGroup>
       </MenuList>
     </Menu>

@@ -3,11 +3,7 @@ import { rest } from 'msw'
 
 import { nanoid } from '@reduxjs/toolkit'
 
-import {
-  ProjectItem,
-  ProjectItemFolder,
-  ProjectItemFolderChildren
-} from '../@types'
+import { ProjectItem, ExplorerTreeNode } from '../@types'
 import { db } from './db'
 import { authMiddleware } from './middlewares'
 
@@ -35,18 +31,13 @@ type UpdateProjectItemBody = Partial<
   Omit<ProjectItem, 'id' | 'created_at' | 'updated_at'>
 >
 
-type ProjectItemRequestTree = {
-  folders: ProjectItemFolder[]
-  alone: ProjectItemFolderChildren[]
-}
-
 type NewProjectItemFolder = {
   name: string
 }
 
 type NewProjectItemRequest = {
-  name: string,
-  method: string,
+  name: string
+  method: string
   folderId?: string
 }
 
@@ -54,25 +45,58 @@ export const handles = [
   rest.post<NewUserBody>('/new-user', (req, res, ctx) => {
     const { email, fullName, password } = req.body
 
-    const user = db.user.findFirst({ where: { email: { equals: email } } })
+    const isEmailInUse = db.user.findFirst({
+      where: { email: { equals: email } }
+    })
 
-    if (user) {
+    if (isEmailInUse) {
       return res(
         ctx.status(400),
         ctx.json({
-          code: 'user.email-in-user',
+          code: 'auth.email-in-user',
           message: 'email already in use'
-        })
+        }),
+        ctx.delay(700)
       )
     }
 
-    db.user.create({
+    const user = db.user.create({
+      id: nanoid(),
       email,
       fullName,
       password
     })
 
-    return res(ctx.status(201))
+    const { id, updated_at, avatarURL, created_at } = user
+
+    const accessToken = nanoid()
+
+    const refreshToken = nanoid()
+
+    db.tokens.create({
+      id: nanoid(),
+      token: accessToken,
+      owner: user
+    })
+
+    return res(
+      ctx.status(201),
+      ctx.json({
+        user: {
+          id,
+          fullName,
+          email,
+          updated_at,
+          avatarURL,
+          created_at
+        },
+        tokens: {
+          refreshToken,
+          accessToken
+        }
+      }),
+      ctx.delay(700)
+    )
   }),
   rest.get(
     '/project-items/:name',
@@ -141,10 +165,7 @@ export const handles = [
         projectItem
       })
 
-      return res(
-        ctx.status(201),
-        ctx.delay(500)
-      )
+      return res(ctx.status(201), ctx.delay(500))
     })
   ),
   rest.post(
@@ -215,64 +236,68 @@ export const handles = [
         }
       }
 
-      return res(
-        ctx.status(201)
-      )
+      return res(ctx.status(201))
     })
   ),
   rest.get(
     '/project-items/:id/details',
     authMiddleware(async (req, res, ctx) => {
-      const { id } = req.params
+      const { id } = req.params as { id: string }
 
-      const data: {
-        requests: ProjectItemRequestTree
-      } = {
-        requests: {
-          alone: [],
-          folders: []
-        }
-      }
-
-      const projectItemRequests = db.projectItemRequests.findMany({
+      const folders = db.projectItemFolders.findMany({
         where: {
           projectItem: {
             id: {
-              equals: String(id)
+              equals: id
             }
           }
         }
       })
 
-      const projectItemFolders = db.projectItemFolders.findMany({
+      const requests = db.projectItemRequests.findMany({
         where: {
           projectItem: {
             id: {
-              equals: String(id)
+              equals: id
             }
           }
         }
       })
 
-      if (projectItemFolders.length) {
-        projectItemFolders.forEach((item) => {
-          data.requests.folders.push({ ...item, children: [] })
-        })
-      }
+      const explore: ExplorerTreeNode[] = folders.map((folder) => ({
+        id: folder.id,
+        name: folder.name,
+        method: null,
+        childrens: []
+      }))
 
-      projectItemRequests.forEach((request) => {
-        if (!request.projectItemFolder) {
-          return data.requests.alone.push({ ...request } as any)
+      requests.forEach((item) => {
+        if (!item.projectItemFolder) {
+          const { id: reqID, name, method } = item
+          explore.push({
+            id: reqID,
+            name,
+            method: method as any,
+            childrens: null
+          })
+        } else {
+          const folder = explore.find(
+            (folderItem) => folderItem.id === item.projectItemFolder?.id
+          )
+
+          if (folder) {
+            const { id: reqID, name, method } = item
+            folder.childrens?.push({
+              id: reqID,
+              name,
+              method: method as any,
+              childrens: null
+            })
+          }
         }
-
-        const folder = data.requests.folders.find(
-          (folderItem) => folderItem.id === request.projectItemFolder?.id
-        )
-
-        folder?.children.push({ ...request } as any)
       })
 
-      return res(ctx.json(data))
+      return res(ctx.json({ explore, folders, requests }), ctx.delay(700))
     })
   ),
   rest.post(
@@ -433,17 +458,19 @@ export const handles = [
         ctx.json({
           code: 'auth.invalid-credentials',
           message: 'email or password invalid'
-        })
+        }),
+        ctx.delay(500)
       )
     }
 
-    if (!(user.password === password)) {
+    if (user.password !== password) {
       return res(
         ctx.status(401),
         ctx.json({
           code: 'auth.invalid-credentials',
           message: 'email or password invalid'
-        })
+        }),
+        ctx.delay(500)
       )
     }
 

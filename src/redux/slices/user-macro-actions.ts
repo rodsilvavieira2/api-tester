@@ -21,6 +21,11 @@ type NewProjectItemFolderInfo = {
   isOpen: boolean
 }
 
+type ShouldDeleteProjectItemInfo = {
+  id: string
+  isOpen: boolean
+}
+
 type AvailableProject = {
   id: string
   name: string
@@ -35,6 +40,7 @@ type UserMacroActionsState = {
   duplicateProjectItemInfo: ProjectItemInfo
   renameProjectItemInfo: RenameProjectItemInfo
   newProjectItemFolderInfo: NewProjectItemFolderInfo
+  shouldDeleteProjectItemInfo: ShouldDeleteProjectItemInfo
   availableProjects: AvailableProject[]
 }
 
@@ -56,6 +62,10 @@ const initialState: UserMacroActionsState = {
   },
   duplicateProjectItemInfo: {
     currentProjectItemName: '',
+    isOpen: false
+  },
+  shouldDeleteProjectItemInfo: {
+    id: '',
     isOpen: false
   },
   isCreateNewProjectItemModalOpen: false,
@@ -86,6 +96,12 @@ const userMacroActionsSlice = createSlice({
       action: PayloadAction<ProjectItemInfo>
     ) => {
       state.duplicateProjectItemInfo = action.payload
+    },
+    setShouldDeleteProjectItemInfo: (
+      state,
+      action: PayloadAction<ShouldDeleteProjectItemInfo>
+    ) => {
+      state.shouldDeleteProjectItemInfo = action.payload
     },
     setRenameProjectItemInfo: (
       state,
@@ -131,7 +147,8 @@ export const {
   setDuplicateProjectItemInfo,
   setRenameProjectItemInfo,
   setNewProjectItemFolderInfo,
-  setSortBy
+  setSortBy,
+  setShouldDeleteProjectItemInfo
 } = userMacroActionsSlice.actions
 
 export const selectSearchValue = (state: RootState) =>
@@ -159,3 +176,6 @@ export const selectSortBy = (state: RootState) => state.userMacroActions.sortBy
 
 export const selectNewProjectItemFolderInfo = (state: RootState) =>
   state.userMacroActions.newProjectItemFolderInfo
+
+export const selectShouldDeleteProjectInfo = (state: RootState) =>
+  state.userMacroActions.shouldDeleteProjectItemInfo

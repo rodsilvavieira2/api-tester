@@ -1,8 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { User } from '../../@types'
+import { localStorageKeys } from '../../config'
+import { getOnStorage } from '../../utils'
 import { baseApi } from '../apis'
 import { RootState } from '../store'
+
+const accessToken =
+  getOnStorage(localStorageKeys.accessToken, 'localStorage') ||
+  getOnStorage(localStorageKeys.accessToken, 'sessionStorage')
+
+const refreshToken =
+  getOnStorage(localStorageKeys.refreshToken, 'localStorage') ||
+  getOnStorage(localStorageKeys.refreshToken, 'sessionStorage')
 
 type AuthInitialState = {
   user: User | null
@@ -15,10 +25,10 @@ type AuthInitialState = {
 
 const initialState: AuthInitialState = {
   user: null,
-  shouldRememberMe: false,
+  shouldRememberMe: !!accessToken,
   tokens: {
-    accessToken: null,
-    refreshToken: null
+    accessToken,
+    refreshToken
   }
 }
 
@@ -35,7 +45,14 @@ export const authSlice = createSlice({
       state.tokens = action.payload
     },
     logout: () => {
-      return initialState
+      return {
+        shouldRememberMe: false,
+        tokens: {
+          accessToken: null,
+          refreshToken: null
+        },
+        user: null
+      }
     },
     setShouldRememberMe: (state, action:PayloadAction<boolean>) => {
       state.shouldRememberMe = action.payload
@@ -49,11 +66,23 @@ export const authSlice = createSlice({
         state.tokens = payload.tokens
       }
     )
+
+    builder.addMatcher(
+      baseApi.endpoints.createNewUser.matchFulfilled,
+      (state, { payload }) => {
+        state.user = payload.user
+        state.tokens = payload.tokens
+      }
+    )
   }
 })
 
 export const authReducer = authSlice.reducer
 
 export const selectUser = (state: RootState) => state.auth.user
+
+export const selectAccessToken = (state:RootState) => state.auth.tokens.accessToken
+
+export const selectRefreshToken = (state:RootState) => state.auth.tokens.refreshToken
 
 export const { logout, setTokens, setShouldRememberMe } = authSlice.actions

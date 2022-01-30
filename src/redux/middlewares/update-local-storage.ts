@@ -1,36 +1,50 @@
 import { Middleware } from 'redux'
 
 import { localStorageKeys } from '../../config'
+import { removeOfStorage, saveOnStorage, StorageType } from '../../utils'
+import { RootState } from '../store'
 
-export const UpdateLocalStorage: Middleware = () => (next) => (action) => {
+export const UpdateLocalStorage: Middleware = (state) => (next) => (action) => {
+  const currentState = state.getState() as RootState
+
+  let storageType:StorageType = 'sessionStorage'
+
+  if (currentState.auth.shouldRememberMe) storageType = 'localStorage'
+
   switch (action.type) {
     case 'baseApi/executeMutation/fulfilled': {
-      if (action.meta.arg.endpointName === 'login') {
-        window.localStorage.setItem(
-          localStorageKeys.accessToken,
-          action.payload.tokens.accessToken
-        )
+      if (
+        action.meta.arg.endpointName === 'login' ||
+        action.meta.arg.endpointName === 'createNewUser'
+      ) {
+        saveOnStorage({
+          key: localStorageKeys.accessToken,
+          data: action.payload.tokens.accessToken,
+          storageType
+        })
 
-        window.localStorage.setItem(
-          localStorageKeys.refreshToken,
-          action.payload.tokens.refreshToken
-        )
+        saveOnStorage({
+          key: localStorageKeys.refreshToken,
+          data: action.payload.tokens.refreshToken,
+          storageType
+        })
       }
       break
     }
 
     case 'auth/logout': {
-      window.localStorage.removeItem(localStorageKeys.accessToken)
+      removeOfStorage({ key: localStorageKeys.accessToken, storageType })
 
-      window.localStorage.removeItem(localStorageKeys.refreshToken)
+      removeOfStorage({ key: localStorageKeys.refreshToken, storageType })
       break
     }
 
     case 'userMarcoActions/setCurrentProject': {
-      window.localStorage.setItem(
-        localStorageKeys.currentProject,
-        action.payload
-      )
+      saveOnStorage({
+        key: localStorageKeys.currentProject,
+        data: action.payload,
+        storageType
+      })
       break
     }
 

@@ -48,21 +48,13 @@ export type CustomError<T> = {
 
 export type SortBy = 'newest' | 'oldest' | 'ascending' | 'descending'
 
-export type ProjectItemFolderChildren = {
-  id: string
-  method: HttpMethods
+export type ExplorerTreeNode = {
+  id: string,
   name: string
+  method: HttpMethods | null
+  childrens: ExplorerTreeNode[] | null
 }
 
-export type ProjectItemFolder = {
-  id: string
-  name: string
-  children: ProjectItemFolderChildren[]
-} & DateIndicators
-
 export type ProjectItemDetails = {
-  requests: {
-    folders: ProjectItemFolder[]
-    alone: ProjectItemFolderChildren[]
-  }
+  explore: ExplorerTreeNode[]
 }

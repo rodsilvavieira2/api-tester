@@ -14,8 +14,6 @@ import {
   HStack,
   Icon,
   Text,
-  List,
-  ListItem,
   Flex,
   Menu,
   MenuButton,
@@ -25,10 +23,10 @@ import {
   MenuDivider
 } from '@chakra-ui/react'
 
-import { ProjectItemFolder } from '../../../../@types'
-import { RequestItem } from './request-item'
-
-type FolderProps = ProjectItemFolder
+type FolderProps = {
+  name: string
+  children: JSX.Element | JSX.Element[]
+}
 
 export const Folder = ({ name, children }: FolderProps) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -36,9 +34,14 @@ export const Folder = ({ name, children }: FolderProps) => {
   const onToggleFolder = () => setIsOpen((prev) => !prev)
 
   return (
-    <Box >
-      <Flex>
-        <HStack flex={1} cursor="pointer" onClick={onToggleFolder}>
+    <Box>
+      <Flex className="">
+        <HStack
+          as="button"
+          flex={1}
+          cursor="pointer"
+          onClick={onToggleFolder}
+        >
           <Icon fontSize="1.1rem" as={isOpen ? FaFolderOpen : FaFolderMinus} />
 
           <Text>{name}</Text>
@@ -68,13 +71,7 @@ export const Folder = ({ name, children }: FolderProps) => {
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
-        <List spacing="2" pl="2">
-          {children.map((item) => (
-            <ListItem key={item.id}>
-              <RequestItem {...item} />
-            </ListItem>
-          ))}
-        </List>
+        {children}
       </Collapse>
     </Box>
   )

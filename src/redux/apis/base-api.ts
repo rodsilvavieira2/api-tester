@@ -8,7 +8,13 @@ type LoginCredentials = {
   password: string
 }
 
-type LoginReturn = {
+type CreateNewUserParams = {
+  fullName: string
+  email: string,
+  password: string
+}
+
+type AuthReturn = {
   user: User,
   tokens: JWTs
 }
@@ -21,9 +27,16 @@ export const baseApi = createApi({
     getUser: builder.mutation<User, void>({
       query: () => '/me'
     }),
-    login: builder.mutation<LoginReturn, LoginCredentials>({
+    login: builder.mutation<AuthReturn, LoginCredentials>({
       query: (body) => ({
         url: '/session',
+        body,
+        method: 'post'
+      })
+    }),
+    createNewUser: builder.mutation<AuthReturn, CreateNewUserParams>({
+      query: (body) => ({
+        url: '/new-user',
         body,
         method: 'post'
       })
@@ -31,4 +44,4 @@ export const baseApi = createApi({
   })
 })
 
-export const { useGetUserMutation, useLoginMutation } = baseApi
+export const { useGetUserMutation, useLoginMutation, useCreateNewUserMutation } = baseApi

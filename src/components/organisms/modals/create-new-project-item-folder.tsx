@@ -22,7 +22,7 @@ type ContentProps = {
   id: string
 } & DefaultContentProps
 
-const Content = ({ onClose, id }:ContentProps) => {
+const Content = ({ onClose, id }: ContentProps) => {
   const [projectItemNameFolder, setProjectItemNameFolder] = useState('')
 
   const [createProjectItemFolder] = useNewProjectItemFolderMutation()
@@ -30,25 +30,11 @@ const Content = ({ onClose, id }:ContentProps) => {
   const toast = useToast()
 
   const onCreate = async () => {
-    const toastID = toast({
-      title: 'Nova pasta',
-      description: 'Processando...',
-      isClosable: false,
-      duration: null,
-      variant: 'left-accent',
-      status: 'error'
-    })
-
     try {
-      await createProjectItemFolder({ id, name: projectItemNameFolder }).unwrap()
-
-      toast({
-        title: 'Nova pasta',
-        description: 'Novo pasta criada com sucesso',
-        isClosable: true,
-        variant: 'left-accent',
-        status: 'success'
-      })
+      await createProjectItemFolder({
+        id,
+        name: projectItemNameFolder
+      }).unwrap()
 
       onClose()
     } catch (e) {
@@ -80,8 +66,6 @@ const Content = ({ onClose, id }:ContentProps) => {
           }
         }
       }
-    } finally {
-      if (toastID) toast.close(toastID)
     }
   }
 

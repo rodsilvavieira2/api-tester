@@ -24,26 +24,19 @@ import {
   Spinner
 } from '@chakra-ui/react'
 
-import {
-  ProjectItemFolder,
-  ProjectItemFolderChildren
-} from '../../../../@types'
+import { ProjectItemDetails } from '../../../../@types'
 import { ProjectItemSearchInput } from '../../../molecules'
-import { Folder } from './folder'
-import { RequestItem } from './request-item'
+import { TreeRecursive } from './tree-recursive'
 
 type DashboardProjectItemSidebarProps = {
   isLoading: boolean
   onNewFolder: () => void
   onNewRequisition: () => void
-  folderTree: {
-    folders: ProjectItemFolder[]
-    alone: ProjectItemFolderChildren[]
-  }
+  details: ProjectItemDetails
 }
 
 export const DashboardProjectItemSidebar = ({
-  folderTree,
+  details: { explore },
   isLoading,
   onNewFolder,
   onNewRequisition
@@ -115,13 +108,7 @@ export const DashboardProjectItemSidebar = ({
           )
         : (
         <Stack p="1" spacing="3" maxH="100%" overflowY="auto">
-          {folderTree.folders.map((folder) => (
-            <Folder key={folder.id} {...folder} />
-          ))}
-
-          {folderTree.alone.map((item) => (
-            <RequestItem key={item.id} {...item} />
-          ))}
+          <TreeRecursive data={explore}/>
         </Stack>
           )}
     </Stack>

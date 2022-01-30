@@ -6,3 +6,7 @@ export type ProjectItemCodeErrors =
 export type ProjectCodeErrors =
   | 'project.project-name-not-found'
   | 'project.name-already-exists'
+
+export type AuthCodeErrors =
+  | 'auth.invalid-credentials'
+  | 'auth.email-in-user'

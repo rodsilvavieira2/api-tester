@@ -1,5 +1,3 @@
-import dayjs from 'dayjs'
-
 import { createEntityAdapter, EntityState } from '@reduxjs/toolkit'
 
 import { ProjectItem } from '../../@types'

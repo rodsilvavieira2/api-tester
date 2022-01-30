@@ -11,7 +11,7 @@ import {
 
 const Base:ForwardRefRenderFunction<HTMLInputElement, InputProps> = (props, ref) => {
   return (
-    <InputGroup>
+    <InputGroup bg='white'>
       <Input {...props} ref={ref}/>
       <InputRightElement>
         <IconButton aria-label="pesquisas">

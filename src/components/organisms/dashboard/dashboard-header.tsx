@@ -1,4 +1,4 @@
-import { MdSettings } from 'react-icons/md'
+import { MdExitToApp, MdSettings } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 
 import {
@@ -7,14 +7,24 @@ import {
   HStack,
   IconButton,
   Image,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Text
 } from '@chakra-ui/react'
 
 import { User } from '../../../@types'
 
-type DashboardHeaderProps = Pick<User, 'avatarURL' | 'fullName'>
+type DashboardHeaderProps = {
+  onExit: () => void
+} & Pick<User, 'avatarURL' | 'fullName'>
 
-export const DashboardHeader = ({ fullName, avatarURL }: DashboardHeaderProps) => {
+export const DashboardHeader = ({
+  fullName,
+  avatarURL,
+  onExit
+}: DashboardHeaderProps) => {
   return (
     <Flex
       position="sticky"
@@ -26,7 +36,7 @@ export const DashboardHeader = ({ fullName, avatarURL }: DashboardHeaderProps) =
       alignItems="center"
       justifyContent="space-between"
       bg="white"
-      zIndex="sticky"
+      zIndex="banner"
     >
       <HStack alignItems="center" as={Link} to="/dashboard">
         <Image h="64px" src="/assets/logo.png" alt="api test" />
@@ -39,7 +49,17 @@ export const DashboardHeader = ({ fullName, avatarURL }: DashboardHeaderProps) =
       <HStack spacing={5}>
         <IconButton aria-label="configurações" icon={<MdSettings />} />
 
-        <Avatar name={fullName} src={avatarURL || undefined} />
+        <Menu>
+          <MenuButton>
+            <Avatar name={fullName} src={avatarURL || undefined} />
+          </MenuButton>
+
+          <MenuList>
+            <MenuItem onClick={onExit} icon={<MdExitToApp fontSize="1.2rem" />}>
+              Sair
+            </MenuItem>
+          </MenuList>
+        </Menu>
       </HStack>
     </Flex>
   )

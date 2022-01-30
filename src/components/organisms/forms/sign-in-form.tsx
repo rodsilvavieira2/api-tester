@@ -47,7 +47,10 @@ export const SignInForm = ({ onSubmit, onToggleMode }: SignFormProps) => {
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm<SignFormFormData>({
-    resolver: yupResolver(signFormValidation)
+    resolver: yupResolver(signFormValidation),
+    defaultValues: {
+      rememberMe: true
+    }
   })
 
   return (

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   SimpleGrid,
   Skeleton,
-  useToast,
   useUpdateEffect
 } from '@chakra-ui/react'
 
@@ -12,7 +11,6 @@ import { ProjectItemCard } from '../../../../components/organisms/cards'
 import { useSearch, useSortBy } from '../../../../hooks'
 import {
   selectAllProjectItems,
-  useDeleteProjectItemMutation,
   useGetProjectItemsQuery
 } from '../../../../redux/apis'
 import {
@@ -20,7 +18,8 @@ import {
   selectCurrentProject,
   setDuplicateProjectItemInfo,
   setRenameProjectItemInfo,
-  selectSortBy
+  selectSortBy,
+  setShouldDeleteProjectItemInfo
 } from '../../../../redux/slices'
 
 export function Projects () {
@@ -45,10 +44,6 @@ export function Projects () {
   )
 
   const appDispatch = useDispatch()
-
-  const toast = useToast()
-
-  const [deleteProjectItem] = useDeleteProjectItemMutation()
 
   useUpdateEffect(() => {
     setIsGettingProjectData(true)
@@ -88,45 +83,18 @@ export function Projects () {
     [appDispatch]
   )
 
-  const onDelete = useCallback(
-    async (id: string) => {
-      try {
-        const toastID = toast({
-          title: 'Deletar item de projeto',
-          description: 'Processando...',
-          isClosable: false,
-          duration: null,
-          status: 'info',
-          variant: 'left-accent'
-        })
-
-        await deleteProjectItem({ id }).unwrap()
-
-        if (toastID) toast.close(toastID)
-
-        toast({
-          title: 'Deletar item de projeto',
-          description: 'Item de projeto deletado',
-          isClosable: true,
-          status: 'success',
-          variant: 'left-accent'
-        })
-      } catch {
-        toast({
-          title: 'Deletar item de projeto',
-          description: 'Algo inesperado aconteceu',
-          isClosable: true,
-          status: 'error',
-          variant: 'left-accent'
-        })
-      }
-    },
-    [deleteProjectItem, toast]
-  )
+  const onDelete = useCallback((id: string) => {
+    appDispatch(
+      setShouldDeleteProjectItemInfo({
+        id,
+        isOpen: true
+      })
+    )
+  }, [appDispatch])
 
   return (
     <>
-      <SimpleGrid minChildWidth="210px" spacing="5">
+      <SimpleGrid minChildWidth="210px" spacing="5" p="8">
         {isLoading || isGettingProjectData
           ? (
           <>

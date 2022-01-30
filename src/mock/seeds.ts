@@ -14,7 +14,7 @@ const user = db.user.create({
 db.tokens.create({
   id: nanoid(),
   owner: user,
-  token: 'KYPmGwB6wiETd4ZNsIIZv'
+  token: 'rN_Fe1imY4BI2EYfZH7fM'
 })
 
 Array.from({ length: 20 }).forEach((_, i) => {

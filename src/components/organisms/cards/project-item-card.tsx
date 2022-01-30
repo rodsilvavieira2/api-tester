@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
+import { motion } from 'framer-motion'
 import { memo, MouseEvent, useRef } from 'react'
-import { HiEye } from 'react-icons/hi'
 import {
   MdAccessTime,
   MdDelete,
@@ -25,13 +25,15 @@ import {
   Text
 } from '@chakra-ui/react'
 
+const MotionLink = motion(Link)
+
 type ProjectItemProps = {
   id: string
   name: string
-  created_at: string
   onDelete: (id: string) => void
   onRename: (id: string, name: string) => void
   onDuplicate: (name: string) => void
+  created_at: string
 }
 
 const Base = ({
@@ -55,7 +57,7 @@ const Base = ({
 
   return (
     <Flex
-      onClick={onClick}
+      boxShadow="lg"
       flexDirection="column"
       py="3"
       border="1px solid"
@@ -64,13 +66,18 @@ const Base = ({
       h="250px"
       maxW="15.375rem"
       cursor="pointer"
+      transition='border 0.3s'
       _hover={{
         borderColor: 'primary'
       }}
       bg="white"
-      as={Link}
       to={`/dashboard/project-item/${id}`}
+      onClick={onClick}
+      as={MotionLink}
       ref={cardRef}
+      whileHover={{
+        y: -15
+      }}
     >
       <Flex w="100%">
         <HStack w="50%" bg="#A0AEC0">
@@ -81,13 +88,14 @@ const Base = ({
           </Text>
         </HStack>
 
-        <Flex w="50%" >
-          <Box ml='auto' ref={buttonWrapper} >
+        <Flex w="50%">
+          <Box ml="auto" ref={buttonWrapper}>
             <Menu>
               <MenuButton
                 mr="3"
                 aria-label="mais opções"
                 as={IconButton}
+                size='sm'
                 ml="auto"
                 icon={<MdMoreHoriz />}
               />
@@ -129,7 +137,7 @@ const Base = ({
           <Icon as={MdAccessTime} />
 
           <Text fontWeight="semibold" as="small">
-            {dayjs(created_at).format('[criado:] DD-MM-YYYY')}
+            {dayjs(created_at).format('[Criado:] DD-MM-YYYY')}
           </Text>
         </HStack>
       </Flex>

@@ -29,10 +29,14 @@ export const DashboardActionsBar = () => {
     <Flex
       borderBottom="1px solid"
       borderColor="border.primary"
-      pb="5"
-      my="5"
+      p="8"
       alignItems="center"
       justifyContent="space-between"
+      position="sticky"
+      zIndex="sticky"
+      top="0"
+      left="0"
+      bg="background.primary"
     >
       <DashBoardNavigationBar />
 

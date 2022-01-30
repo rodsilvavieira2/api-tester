@@ -1,3 +1,5 @@
+import { nanoid } from '@reduxjs/toolkit'
+
 import { ProjectItemDetails } from '../../@types'
 import { baseApi } from './base-api'
 
@@ -31,7 +33,33 @@ const projectItemDetailsApiSlice = baseApi.injectEndpoints({
       }),
       invalidatesTags: (error) => {
         return error ? [] : ['project-item-details']
+      },
+      async onQueryStarted (
+        { id, name },
+        { dispatch, queryFulfilled }
+      ) {
+        const patchResult = dispatch(
+          projectItemDetailsApiSlice.util.updateQueryData(
+            'getProjectItemDetails',
+            { id },
+            (draft) => {
+              draft.explore.push({
+                id: nanoid(),
+                name,
+                childrens: [],
+                method: null
+              })
+            }
+          )
+        )
+
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
       }
+
     })
   })
 })

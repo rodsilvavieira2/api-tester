@@ -1,21 +1,24 @@
+/* eslint-disable no-debugger */
 import { useCallback, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { Center, useToast } from '@chakra-ui/react'
 
+import { CustomError } from '../@types'
 import {
   SignFormFormData,
   SignInForm,
-  SingUpForm
+  SingUpForm,
+  SingUpFormFormData
 } from '../components/organisms/forms'
-import { localStorageKeys } from '../config'
-import { useLocalStorage } from '../hooks'
-import { useLoginMutation } from '../redux/apis'
+import { useCreateNewUserMutation, useLoginMutation } from '../redux/apis'
+import { selectAccessToken, setShouldRememberMe } from '../redux/slices'
+import { AuthCodeErrors } from '../shared/errors'
 
 export default function AuthenticationPage () {
   const [isInSignUpMode, setIsInSignUpMode] = useState(false)
-  const [accessToken] = useLocalStorage(localStorageKeys.accessToken, null)
+  const accessToken = useSelector(selectAccessToken)
 
   const navigation = useNavigate()
 
@@ -26,6 +29,7 @@ export default function AuthenticationPage () {
   }, [accessToken, navigation])
 
   const [onSignIn] = useLoginMutation()
+  const [onSingUp] = useCreateNewUserMutation()
 
   const toast = useToast()
 
@@ -33,34 +37,96 @@ export default function AuthenticationPage () {
     setIsInSignUpMode((prev) => !prev)
   }, [])
 
-  const handleSubmit = useCallback((data) => {
-    console.log(data)
-  }, [])
+  const onSignUpSubmit = useCallback(
+    async (data: SingUpFormFormData) => {
+      try {
+        appDispatch(setShouldRememberMe(data.rememberMe))
+        await onSingUp({ ...data }).unwrap()
+
+        navigation('/dashboard')
+      } catch (e) {
+        appDispatch(setShouldRememberMe(false))
+
+        const error = e as CustomError<AuthCodeErrors>
+
+        const code = error.data?.code
+
+        if (code) {
+          switch (code) {
+            case 'auth.email-in-user': {
+              toast({
+                title: 'Autenticação',
+                description: 'Esse email em uso',
+                isClosable: true,
+                variant: 'left-accent',
+                status: 'error'
+              })
+              break
+            }
+            default: {
+              toast({
+                title: 'Autenticação',
+                description: 'Desculpe, aconteceu um erro inesperado',
+                isClosable: true,
+                variant: 'left-accent',
+                status: 'error'
+              })
+            }
+          }
+        }
+      }
+    },
+    [appDispatch, navigation, onSingUp, toast]
+  )
 
   const onSignInSubmit = useCallback(
     async (data: SignFormFormData) => {
       try {
+        appDispatch(setShouldRememberMe(data.rememberMe))
         await onSignIn({ ...data }).unwrap()
 
         navigation('/dashboard')
       } catch (e) {
-        toast({
-          title: 'Autenticação',
-          description: 'Email ou senha invalidos',
-          isClosable: true,
-          variant: 'left-accent',
-          status: 'error'
-        })
+        appDispatch(setShouldRememberMe(false))
+
+        const error = e as CustomError<AuthCodeErrors>
+
+        const code = error.data?.code
+
+        if (code) {
+          switch (code) {
+            case 'auth.invalid-credentials': {
+              toast({
+                title: 'Autenticação',
+                description: 'Email ou senha invalido',
+                isClosable: true,
+                variant: 'left-accent',
+                status: 'error'
+              })
+              break
+            }
+            default: {
+              toast({
+                title: 'Autenticação',
+                description: 'Desculpe, aconteceu um erro inesperado',
+                isClosable: true,
+                variant: 'left-accent',
+                status: 'error'
+              })
+            }
+          }
+        }
       }
     },
-    [navigation, onSignIn, toast]
+    [appDispatch, navigation, onSignIn, toast]
   )
+  if (accessToken) return null
 
   return (
-    <Center w="100vw" minH="100vh" >
+    <Center w="100vw" minH="100vh">
       {isInSignUpMode
         ? (
-        <SingUpForm onToggleMode={onToggleMode} onSubmit={handleSubmit} />
+        <SingUpForm onToggleMode={onToggleMode} onSubmit={onSignUpSubmit} />
           )
         : (
         <SignInForm onToggleMode={onToggleMode} onSubmit={onSignInSubmit} />

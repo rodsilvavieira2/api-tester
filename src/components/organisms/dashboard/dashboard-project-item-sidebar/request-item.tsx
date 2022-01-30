@@ -1,4 +1,10 @@
-import { MdArrowDropDown, MdContentCopy, MdDelete, MdOutlineSettings, MdPushPin } from 'react-icons/md'
+import {
+  MdArrowDropDown,
+  MdContentCopy,
+  MdDelete,
+  MdOutlineSettings,
+  MdPushPin
+} from 'react-icons/md'
 
 import {
   Badge,
@@ -12,29 +18,17 @@ import {
   MenuDivider
 } from '@chakra-ui/react'
 
-import { HttpMethods } from '../../../../@types'
+import { ExplorerTreeNode } from '../../../../@types'
 import { RequestColorSchemes } from '../../../../shared'
 
-type RequestItemProps = {
-  id: string
-  name: string
-  method: HttpMethods
-}
-
-export const RequestItem = ({ method, name }: RequestItemProps) => {
+export const RequestItem = ({ method, name }: ExplorerTreeNode) => {
   return (
-    <Flex
-      py="2"
-      px="3"
-      borderRadius="base"
-      justifyContent="space-between"
-      bg="gray.100"
-    >
+    <Flex justifyContent="space-between">
       <HStack>
         <Badge
           minW="3.5rem"
           textAlign="center"
-          colorScheme={RequestColorSchemes[method]}
+          colorScheme={method ? RequestColorSchemes[method] : undefined}
         >
           {method}
         </Badge>
@@ -65,7 +59,9 @@ export const RequestItem = ({ method, name }: RequestItemProps) => {
 
           <MenuDivider />
 
-          <MenuItem icon={<MdOutlineSettings fontSize='1.3rem' />} >Configurações</MenuItem>
+          <MenuItem icon={<MdOutlineSettings fontSize="1.3rem" />}>
+            Configurações
+          </MenuItem>
         </MenuList>
       </Menu>
     </Flex>

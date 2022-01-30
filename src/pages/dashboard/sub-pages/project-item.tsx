@@ -19,7 +19,7 @@ type Params = {
 export default function ProjectItemPage () {
   const { id = '' } = useParams<Params>()
 
-  const { data = { requests: { alone: [], folders: [] } }, isLoading } =
+  const { data = { explore: [] }, isLoading } =
     useGetProjectItemDetailsQuery({ id })
 
   const appDispatch = useDispatch()
@@ -33,11 +33,11 @@ export default function ProjectItemPage () {
   }, [])
 
   return (
-    <Flex h="100%">
+    <Flex h="100%" p='3' bg='inherit' >
       <DashboardProjectItemSidebar
         onNewFolder={onNewFolder}
         onNewRequisition={onNewRequisition}
-        folderTree={data.requests}
+        details={data}
         isLoading={isLoading}
       />
 
