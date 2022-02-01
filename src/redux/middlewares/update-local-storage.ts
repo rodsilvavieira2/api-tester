@@ -39,7 +39,7 @@ export const UpdateLocalStorage: Middleware = (state) => (next) => (action) => {
       break
     }
 
-    case 'userMarcoActions/setCurrentProject': {
+    case 'userMarcoActions/setCurrentProjectID': {
       saveOnStorage({
         key: localStorageKeys.currentProject,
         data: action.payload,

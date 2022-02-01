@@ -4,7 +4,7 @@ import { ProjectItem } from '../../@types'
 import { baseApi } from './base-api'
 
 type GetProjectItemsParams = {
-  projectName: string
+  id: string
 }
 
 type CreateProjectIemParams = {
@@ -31,7 +31,7 @@ export const projectItemsApiSlice = baseApi.injectEndpoints({
       EntityState<ProjectItem>,
       GetProjectItemsParams
     >({
-      query: ({ projectName }) => `/project-items/${projectName}`,
+      query: ({ id }) => `/project-items/${id}`,
       transformResponse: (resp: ProjectItem[]) => {
         return projectItemsAdapter.setAll(initialState, resp)
       },

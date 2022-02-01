@@ -18,10 +18,6 @@ type NewUserBody = {
   password: string
 }
 
-type NewProjectsBody = {
-  projectName: string
-}
-
 type NewProjectIemBody = {
   projectName: string
   projectItemName: string
@@ -38,7 +34,7 @@ type NewProjectItemFolder = {
 type NewProjectItemRequest = {
   name: string
   method: string
-  folderId?: string
+  parentID: string | null
 }
 
 export const handles = [
@@ -99,12 +95,12 @@ export const handles = [
     )
   }),
   rest.get(
-    '/project-items/:name',
+    '/project-items/:id',
     authMiddleware(async (req, res, ctx) => {
-      const { name } = req.params
+      const { id } = req.params as { id: string }
 
       const project = db.projects.findFirst({
-        where: { name: { equals: String(name) } }
+        where: { id: { equals: id } }
       })
 
       if (!project) {
@@ -168,11 +164,82 @@ export const handles = [
       return res(ctx.status(201), ctx.delay(500))
     })
   ),
+  rest.delete(
+    '/project-items/:id/folder/:folderID',
+    authMiddleware(async (req, res, ctx) => {
+      const { folderID, id } = req.params as { id: string; folderID: string }
+
+      const projectItem = db.projectItems.findFirst({
+        where: {
+          id: {
+            equals: id
+          }
+        }
+      })
+
+      if (!projectItem) {
+        return res(
+          ctx.status(404),
+          ctx.json({
+            code: 'project-item.not-found'
+          })
+        )
+      }
+
+      db.projectItemFolders.delete({
+        where: {
+          id: {
+            equals: folderID
+          }
+        }
+      })
+
+      return res(ctx.status(204))
+    })
+  ),
+  rest.put(
+    '/project-items/:id/folder/:folderID',
+    authMiddleware(async (req, res, ctx) => {
+      const { folderID, id } = req.params as { id: string; folderID: string }
+      const { name } = req.body as {
+        name?: string
+      }
+      const projectItem = db.projectItems.findFirst({
+        where: {
+          id: {
+            equals: id
+          }
+        }
+      })
+
+      if (!projectItem) {
+        return res(
+          ctx.status(404),
+          ctx.json({
+            code: 'project-item.not-found'
+          })
+        )
+      }
+
+      db.projectItemFolders.update({
+        data: {
+          name
+        },
+        where: {
+          id: {
+            equals: folderID
+          }
+        }
+      })
+
+      return res(ctx.status(200))
+    })
+  ),
   rest.post(
     '/project-item/:id/request',
     authMiddleware(async (req, res, ctx) => {
       const { id } = req.params as { id: string }
-      const { folderId, method, name } = req.body as NewProjectItemRequest
+      const { parentID, method, name } = req.body as NewProjectItemRequest
 
       const projectItem = db.projectItems.findFirst({
         where: {
@@ -215,10 +282,10 @@ export const handles = [
         projectItem
       })
 
-      if (folderId) {
+      if (parentID) {
         const folder = db.projectItemFolders.findFirst({
           where: {
-            id: { equals: folderId }
+            id: { equals: parentID }
           }
         })
 
@@ -243,6 +310,24 @@ export const handles = [
     '/project-items/:id/details',
     authMiddleware(async (req, res, ctx) => {
       const { id } = req.params as { id: string }
+
+      const projectItem = db.projectItems.findFirst({
+        where: {
+          id: {
+            equals: id
+          }
+        }
+      })
+
+      if (!projectItem) {
+        return res(
+          ctx.status(404),
+          ctx.delay(500),
+          ctx.json({
+            code: 'project-item.not-found'
+          })
+        )
+      }
 
       const folders = db.projectItemFolders.findMany({
         where: {
@@ -297,7 +382,7 @@ export const handles = [
         }
       })
 
-      return res(ctx.json({ explore, folders, requests }), ctx.delay(700))
+      return res(ctx.json({ explore }), ctx.delay(700))
     })
   ),
   rest.post(
@@ -405,10 +490,10 @@ export const handles = [
   rest.post(
     '/projects',
     authMiddleware(async (req, res, ctx, user) => {
-      const { projectName } = req.body as NewProjectsBody
+      const { name } = req.body as { name: string }
 
       const project = db.projects.findFirst({
-        where: { name: { equals: projectName } }
+        where: { name: { equals: name } }
       })
 
       if (project) {
@@ -424,15 +509,57 @@ export const handles = [
 
       const date = new Date().toISOString()
 
-      db.projects.create({
+      const newProject = db.projects.create({
         id: nanoid(),
         owner: user as any,
-        name: projectName,
+        name,
         created_at: date,
         updated_at: date
       })
 
-      return res(ctx.status(201))
+      return res(ctx.status(201), ctx.delay(800), ctx.json(newProject))
+    })
+  ),
+  rest.put(
+    '/projects/:id',
+    authMiddleware(async (req, res, ctx) => {
+      const { id } = req.params as { id: string }
+
+      const { name } = req.body as { name?: string }
+
+      const project = db.projects.findFirst({
+        where: {
+          id: {
+            equals: id
+          }
+        }
+      })
+
+      if (!project) {
+        return res(
+          ctx.status(404),
+          ctx.json({
+            code: 'project.not-found',
+            message: 'project not found'
+          })
+        )
+      }
+
+      db.projects.update({
+        where: {
+          id: {
+            equals: id
+          }
+        },
+        data: {
+          name
+        }
+      })
+
+      return res(
+        ctx.status(200),
+        ctx.delay(700)
+      )
     })
   ),
   rest.get(

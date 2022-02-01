@@ -2,76 +2,76 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { SortBy } from '../../@types'
 import { localStorageKeys } from '../../config'
-import { projectsApiSlice, selectAllProjects } from '../apis'
+import { getOnStorage } from '../../utils/local-storage'
 import { RootState } from '../store'
 
-type ProjectItemInfo = {
-  currentProjectItemName: string
+export type ProjectDecisionActions = 'project.create' | 'project.rename'
+
+export type ProjectItemDecisionActions =
+  | 'project_item.create'
+  | 'project_item.rename'
+  | 'project_item.delete'
+  | 'project_item.duplicate'
+
+export type ProjectItemFolderDecisionActions =
+  | 'project_item_folder.create'
+  | 'project_item_folder.rename'
+  | 'project_item_folder.delete'
+  | 'project_item_folder.duplicate'
+
+export type ProjectItemRequestDecisionActions =
+  | 'project_item_request.create'
+  | 'project_item_request.rename'
+  | 'project_item_request.delete'
+  | 'project_item_request.duplicate'
+
+export type DecisionActionType =
+  | ProjectDecisionActions
+  | ProjectItemDecisionActions
+  | ProjectItemFolderDecisionActions
+  | ProjectItemRequestDecisionActions
+  | 'no-action'
+
+type Obj = Record<string, unknown>
+
+type DecisionAction = {
+  id: string | null
+  type: DecisionActionType
+  defaultValues?: Obj
   isOpen: boolean
 }
 
-type RenameProjectItemInfo = {
-  currentProjectItemName: string
-  isOpen: boolean
-  id: string
-}
-
-type NewProjectItemFolderInfo = {
-  id: string
-  isOpen: boolean
-}
-
-type ShouldDeleteProjectItemInfo = {
-  id: string
-  isOpen: boolean
-}
-
-type AvailableProject = {
-  id: string
-  name: string
+export type ToastData = {
+  title: string
+  description: string
+  isClosable?: boolean
+  duration?: null | number
+  variant?: 'subtle' | 'solid' | 'left-accent' | 'top-accent'
+  status?: 'info' | 'warning' | 'success' | 'error'
 }
 
 type UserMacroActionsState = {
   searchValue: string
-  currentProject: string
+  currentProjectID: string
   sortBy: SortBy
-  isCreateNewProjectModalOpen: boolean
-  isCreateNewProjectItemModalOpen: boolean
-  duplicateProjectItemInfo: ProjectItemInfo
-  renameProjectItemInfo: RenameProjectItemInfo
-  newProjectItemFolderInfo: NewProjectItemFolderInfo
-  shouldDeleteProjectItemInfo: ShouldDeleteProjectItemInfo
-  availableProjects: AvailableProject[]
+  decisionAction: DecisionAction
+  toastData: ToastData | null
 }
 
-const currentProjectLocalStore = window.localStorage.getItem(
-  localStorageKeys.currentProject
-)
+const currentProjectIDtLocalStore =
+  getOnStorage(localStorageKeys.currentProject, 'localStorage') ||
+  getOnStorage(localStorageKeys.currentProject, 'sessionStorage')
 
 const initialState: UserMacroActionsState = {
-  isCreateNewProjectModalOpen: false,
   sortBy: 'newest',
-  renameProjectItemInfo: {
-    id: '',
-    currentProjectItemName: '',
-    isOpen: false
-  },
-  newProjectItemFolderInfo: {
-    id: '',
-    isOpen: false
-  },
-  duplicateProjectItemInfo: {
-    currentProjectItemName: '',
-    isOpen: false
-  },
-  shouldDeleteProjectItemInfo: {
-    id: '',
-    isOpen: false
-  },
-  isCreateNewProjectItemModalOpen: false,
   searchValue: '',
-  currentProject: currentProjectLocalStore ?? '',
-  availableProjects: []
+  toastData: null,
+  decisionAction: {
+    id: null,
+    isOpen: false,
+    type: 'no-action'
+  },
+  currentProjectID: currentProjectIDtLocalStore ?? ''
 }
 
 const userMacroActionsSlice = createSlice({
@@ -81,59 +81,36 @@ const userMacroActionsSlice = createSlice({
     setSearchValue: (state, action: PayloadAction<string>) => {
       state.searchValue = action.payload
     },
-    setCurrentProject: (state, action: PayloadAction<string>) => {
-      state.currentProject = action.payload
-    },
-    toggleCreateNewProjectOpen: (state) => {
-      state.isCreateNewProjectModalOpen = !state.isCreateNewProjectModalOpen
-    },
-    toggleCreateNewProjectItemOpen: (state) => {
-      state.isCreateNewProjectItemModalOpen =
-        !state.isCreateNewProjectItemModalOpen
-    },
-    setDuplicateProjectItemInfo: (
-      state,
-      action: PayloadAction<ProjectItemInfo>
-    ) => {
-      state.duplicateProjectItemInfo = action.payload
-    },
-    setShouldDeleteProjectItemInfo: (
-      state,
-      action: PayloadAction<ShouldDeleteProjectItemInfo>
-    ) => {
-      state.shouldDeleteProjectItemInfo = action.payload
-    },
-    setRenameProjectItemInfo: (
-      state,
-      action: PayloadAction<RenameProjectItemInfo>
-    ) => {
-      state.renameProjectItemInfo = action.payload
-    },
-    setNewProjectItemFolderInfo: (
-      state,
-      action: PayloadAction<NewProjectItemFolderInfo>
-    ) => {
-      state.newProjectItemFolderInfo = action.payload
+    setCurrentProjectID: (state, action: PayloadAction<string>) => {
+      state.currentProjectID = action.payload
     },
     setSortBy: (state, action: PayloadAction<SortBy>) => {
       state.sortBy = action.payload
-    }
-  },
-  extraReducers: (builder) => {
-    builder.addMatcher(
-      projectsApiSlice.endpoints.getAllProjects.matchFulfilled,
-      (state, { payload }) => {
-        const projects = selectAllProjects(payload)
+    },
+    setDecisionAction: (state, action: PayloadAction<DecisionAction>) => {
+      state.decisionAction = action.payload
+    },
+    setToastData: (state, action: PayloadAction<ToastData | null>) => {
+      if (action.payload) {
+        const {
+          description,
+          status = 'success',
+          title,
+          duration = 3000,
+          isClosable = true,
+          variant = 'left-accent'
+        } = action.payload
 
-        state.availableProjects = projects.map(({ id, name }) => ({ id, name }))
-
-        if (!state.currentProject.length) {
-          if (projects.length) {
-            state.currentProject = projects[0].name
-          }
+        state.toastData = {
+          description,
+          status,
+          title,
+          duration,
+          isClosable,
+          variant
         }
       }
-    )
+    }
   }
 })
 
@@ -141,41 +118,22 @@ export const userMacroActionsReducer = userMacroActionsSlice.reducer
 
 export const {
   setSearchValue,
-  setCurrentProject,
-  toggleCreateNewProjectOpen,
-  toggleCreateNewProjectItemOpen,
-  setDuplicateProjectItemInfo,
-  setRenameProjectItemInfo,
-  setNewProjectItemFolderInfo,
+  setCurrentProjectID,
   setSortBy,
-  setShouldDeleteProjectItemInfo
+  setDecisionAction,
+  setToastData
 } = userMacroActionsSlice.actions
 
 export const selectSearchValue = (state: RootState) =>
   state.userMacroActions.searchValue
 
-export const selectCurrentProject = (state: RootState) =>
-  state.userMacroActions.currentProject
+export const selectCurrentProjectID = (state: RootState) =>
+  state.userMacroActions.currentProjectID
 
-export const selectAvailableProjects = (state: RootState) =>
-  state.userMacroActions.availableProjects
-
-export const selectIsCreateNewProjectModalOpen = (state: RootState) =>
-  state.userMacroActions.isCreateNewProjectModalOpen
-
-export const selectIsCreateNewProjectItemModalOpen = (state: RootState) =>
-  state.userMacroActions.isCreateNewProjectItemModalOpen
-
-export const selectDuplicateProjectItemInfo = (state: RootState) =>
-  state.userMacroActions.duplicateProjectItemInfo
-
-export const selectRenameProjectItemInfo = (state: RootState) =>
-  state.userMacroActions.renameProjectItemInfo
+export const selectDecisionAction = (state: RootState) =>
+  state.userMacroActions.decisionAction
 
 export const selectSortBy = (state: RootState) => state.userMacroActions.sortBy
 
-export const selectNewProjectItemFolderInfo = (state: RootState) =>
-  state.userMacroActions.newProjectItemFolderInfo
-
-export const selectShouldDeleteProjectInfo = (state: RootState) =>
-  state.userMacroActions.shouldDeleteProjectItemInfo
+export const selectToastData = (state: RootState) =>
+  state.userMacroActions.toastData

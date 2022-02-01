@@ -5,6 +5,8 @@ type DateIndicators = {
 
 export type ID = string
 
+export type Obj = Record<string, unknown>
+
 export type User = {
   id: ID
   fullName: string

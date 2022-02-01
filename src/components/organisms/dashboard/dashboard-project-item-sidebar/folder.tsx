@@ -20,7 +20,8 @@ import {
   IconButton,
   MenuList,
   MenuItem,
-  MenuDivider
+  MenuDivider,
+  Stack
 } from '@chakra-ui/react'
 
 type FolderProps = {
@@ -36,15 +37,17 @@ export const Folder = ({ name, children }: FolderProps) => {
   return (
     <Box>
       <Flex className="">
-        <HStack
-          as="button"
-          flex={1}
-          cursor="pointer"
-          onClick={onToggleFolder}
-        >
+        <HStack as="button" flex={1} cursor="pointer" onClick={onToggleFolder}>
           <Icon fontSize="1.1rem" as={isOpen ? FaFolderOpen : FaFolderMinus} />
 
-          <Text>{name}</Text>
+          <Text
+            maxW="20ch"
+            whiteSpace="nowrap"
+            overflow="hidden"
+            textOverflow="ellipsis"
+          >
+            {name}
+          </Text>
         </HStack>
 
         <Menu>
@@ -70,8 +73,14 @@ export const Folder = ({ name, children }: FolderProps) => {
         </Menu>
       </Flex>
 
-      <Collapse in={isOpen} animateOpacity>
-        {children}
+      <Collapse
+        in={isOpen}
+        animateOpacity
+        style={{
+          padding: '0 0.5rem'
+        }}
+      >
+        <Stack>{children}</Stack>
       </Collapse>
     </Box>
   )

@@ -9,7 +9,8 @@ import { DashboardHeader } from '../../components/organisms/dashboard'
 import { DashboardLoadingContent } from '../../components/organisms/dashboard'
 import { useGetUserMutation } from '../../redux/apis'
 import { logout, selectAccessToken } from '../../redux/slices'
-import { ModalsController } from './modals-controler'
+import { ModalsController } from './modals-controller'
+import { ToastsController } from './toasts-controller'
 
 export default function DashboardPage () {
   const accessToken = useSelector(selectAccessToken)
@@ -52,6 +53,8 @@ export default function DashboardPage () {
       </Box>
 
       <ModalsController />
+
+      <ToastsController />
     </Box>
   )
 }

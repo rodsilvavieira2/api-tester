@@ -1,5 +1,6 @@
-import { useCallback, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import {
   SimpleGrid,
@@ -15,15 +16,12 @@ import {
 } from '../../../../redux/apis'
 import {
   selectSearchValue,
-  selectCurrentProject,
-  setDuplicateProjectItemInfo,
-  setRenameProjectItemInfo,
-  selectSortBy,
-  setShouldDeleteProjectItemInfo
+  selectCurrentProjectID,
+  selectSortBy
 } from '../../../../redux/slices'
 
 export function Projects () {
-  const currentProject = useSelector(selectCurrentProject)
+  const currentProjectID = useSelector(selectCurrentProjectID)
   const sortBy = useSelector(selectSortBy)
   const searchValue = useSelector(selectSearchValue)
 
@@ -31,7 +29,7 @@ export function Projects () {
 
   const { items, isLoading, isFetching } = useGetProjectItemsQuery(
     {
-      projectName: currentProject
+      id: currentProjectID
     },
     {
       selectFromResult: ({ data = { entities: {}, ids: [] }, ...rest }) => {
@@ -43,11 +41,9 @@ export function Projects () {
     }
   )
 
-  const appDispatch = useDispatch()
-
   useUpdateEffect(() => {
     setIsGettingProjectData(true)
-  }, [currentProject])
+  }, [currentProjectID])
 
   useUpdateEffect(() => {
     if (isGettingProjectData && !isFetching) {
@@ -58,39 +54,10 @@ export function Projects () {
   const searchedItems = useSearch({ data: items, searchValue })
   const sortedItems = useSortBy({ data: searchedItems, sortBy })
 
-  const onDuplicate = useCallback(
-    (name: string) => {
-      appDispatch(
-        setDuplicateProjectItemInfo({
-          currentProjectItemName: name,
-          isOpen: true
-        })
-      )
-    },
-    [appDispatch]
-  )
+  const onDuplicate = () => {}
 
-  const onRename = useCallback(
-    (id: string, name: string) => {
-      appDispatch(
-        setRenameProjectItemInfo({
-          id,
-          currentProjectItemName: name,
-          isOpen: true
-        })
-      )
-    },
-    [appDispatch]
-  )
-
-  const onDelete = useCallback((id: string) => {
-    appDispatch(
-      setShouldDeleteProjectItemInfo({
-        id,
-        isOpen: true
-      })
-    )
-  }, [appDispatch])
+  const onRename = () => {}
+  const onDelete = () => {}
 
   return (
     <>

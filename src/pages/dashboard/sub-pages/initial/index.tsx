@@ -1,11 +1,11 @@
 
 import { DashboardActionsBar } from '../../../../components/organisms/dashboard'
+import { DashboardEmptyProjectList } from '../../../../components/organisms/dashboard'
 import { DashboardLoadingContent } from '../../../../components/organisms/dashboard/'
 import {
   useGetAllProjectsQuery,
   selectAllProjects
 } from '../../../../redux/apis'
-import { EmptyProjectList } from './empty-project-list'
 import { Projects } from './projects'
 
 export default function Initial () {
@@ -23,7 +23,7 @@ export default function Initial () {
   }
 
   if (!projects.length && currentData) {
-    return <EmptyProjectList />
+    return <DashboardEmptyProjectList />
   }
 
   return (

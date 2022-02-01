@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import { FallBack } from './pages/fall-back'
+import { FallBack } from './components/organisms/fall-back'
 
 const AuthenticationPage = lazy(() => import('./pages/authentication'))
 const NotFoundPage = lazy(() => import('./pages/not-found'))

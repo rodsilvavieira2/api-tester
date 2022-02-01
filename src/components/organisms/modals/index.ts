@@ -1,5 +1,2 @@
-export * from './create-new-project'
-export * from './create-new-project-item'
-export * from './duplicate-project-item'
 export * from './rename-project-item'
-export * from './create-new-project-item-folder'
+export * from './make-action'

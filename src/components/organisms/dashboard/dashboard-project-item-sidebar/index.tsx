@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react'
 import { HiPlusSm } from 'react-icons/hi'
 import {
   MdArrowDropDown,
@@ -19,9 +20,7 @@ import {
   MenuItemOption,
   MenuList,
   MenuOptionGroup,
-  Stack,
-  Center,
-  Spinner
+  Stack
 } from '@chakra-ui/react'
 
 import { ProjectItemDetails } from '../../../../@types'
@@ -29,18 +28,20 @@ import { ProjectItemSearchInput } from '../../../molecules'
 import { TreeRecursive } from './tree-recursive'
 
 type DashboardProjectItemSidebarProps = {
-  isLoading: boolean
   onNewFolder: () => void
   onNewRequisition: () => void
   details: ProjectItemDetails
 }
 
-export const DashboardProjectItemSidebar = ({
+const Base = ({
   details: { explore },
-  isLoading,
   onNewFolder,
   onNewRequisition
 }: DashboardProjectItemSidebarProps) => {
+  const tree = useMemo(() => {
+    return <TreeRecursive data={explore} />
+  }, [explore])
+
   return (
     <Stack
       as="aside"
@@ -90,27 +91,28 @@ export const DashboardProjectItemSidebar = ({
           <MenuButton size="sm" as={IconButton} ml="6" icon={<HiPlusSm />} />
 
           <MenuList>
-            <MenuItem onClick={onNewRequisition} icon={<MdOutlineSend fontSize="1.3rem" />}>
+            <MenuItem
+              onClick={onNewRequisition}
+              icon={<MdOutlineSend fontSize="1.3rem" />}
+            >
               Nova requisição
             </MenuItem>
 
-            <MenuItem onClick={onNewFolder} icon={<MdFolder fontSize="1.3rem" />}>
+            <MenuItem
+              onClick={onNewFolder}
+              icon={<MdFolder fontSize="1.3rem" />}
+            >
               Nova Pasta
             </MenuItem>
           </MenuList>
         </Menu>
       </Flex>
-      {isLoading
-        ? (
-        <Center h="100%" w='100%'>
-          <Spinner />
-        </Center>
-          )
-        : (
-        <Stack p="1" spacing="3" maxH="100%" overflowY="auto">
-          <TreeRecursive data={explore}/>
-        </Stack>
-          )}
+
+      <Stack p="1" spacing="3" maxH="100%" overflowY="auto">
+          {tree}
+      </Stack>
     </Stack>
   )
 }
+
+export const DashboardProjectItemSidebar = memo(Base)

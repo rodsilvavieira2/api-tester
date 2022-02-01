@@ -1,7 +1,6 @@
 import { HiPlusSm } from 'react-icons/hi'
 import { MdInsertDriveFile } from 'react-icons/md'
 import { RiStackFill } from 'react-icons/ri'
-import { useDispatch } from 'react-redux'
 
 import {
   Button,
@@ -14,16 +13,12 @@ import {
   MenuList
 } from '@chakra-ui/react'
 
-import { toggleCreateNewProjectItemOpen } from '../../../../redux/slices'
 import { DashBoardNavigationBar } from '../dashboard-navigation-bar'
 import { SearchInputWrapper } from './search-input-wrapper'
 import { SortByMenu } from './sort-by-menu'
 
 export const DashboardActionsBar = () => {
-  const appDispatch = useDispatch()
-
-  const onCreateNewProjectItem = () =>
-    appDispatch(toggleCreateNewProjectItemOpen())
+  const onCreateNewProjectItem = () => { console.log('create') }
 
   return (
     <Flex
