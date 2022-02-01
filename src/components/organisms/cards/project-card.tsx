@@ -83,7 +83,7 @@ const Base = ({
       as={MotionLink}
       ref={cardRef}
       whileHover={{
-        y: -15
+        y: -5
       }}
     >
       <Flex w="100%">

@@ -18,7 +18,7 @@ type Params = {
   id: string
 }
 
-export default function ProjectItemPage () {
+export default function ProjectItemsPage () {
   const { id = '' } = useParams<Params>()
 
   const {

@@ -36,7 +36,8 @@ export const DashboardActionsBar = ({ menuConfig }: DashboardActionsBarProps) =>
     <Flex
       borderBottom="1px solid"
       borderColor="border.primary"
-      p="8"
+      py='4'
+      px='8'
       alignItems="center"
       justifyContent="space-between"
       position="sticky"

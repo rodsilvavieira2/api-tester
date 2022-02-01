@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { useMemo } from 'react'
 import { HiPlusSm } from 'react-icons/hi'
 import { MdInsertDriveFile } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
-// import { RiStackFill } from 'react-icons/ri'
 
 import {
   DashboardActionsBar,

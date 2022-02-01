@@ -23,7 +23,7 @@ export const App = () => {
             <Route index element={<InitialPage />} />
 
             <Route
-              path="project-item/:id"
+              path="project/:id"
               element={<ProjectItemPage />}
             />
           </Route>

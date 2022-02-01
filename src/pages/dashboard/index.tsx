@@ -39,7 +39,7 @@ export default function DashboardPage () {
   }, [accessToken, appDispatch, isError, navigate])
 
   return (
-    <Box minH="100vh" position='relative'>
+    <Box h="100vh" position='relative' overflow='hidden'>
       {!isLoading && data
         ? (
         <DashboardHeader onExit={onExit} fullName={data.fullName} avatarURL={data.avatarURL} />
@@ -48,7 +48,7 @@ export default function DashboardPage () {
         <Skeleton h="5rem" px="8" boxShadow="lg" />
           )}
 
-      <Box h="calc(100vh - 5rem)" overflowY='auto'>
+      <Box h="calc(100vh - 5rem)" overflow='hidden'>
         {!isLoading && data ? <Outlet /> : <DashboardLoadingContent />}
       </Box>
 
