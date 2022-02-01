@@ -1,16 +1,23 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { useMemo } from 'react'
+import { HiPlusSm } from 'react-icons/hi'
+import { MdInsertDriveFile } from 'react-icons/md'
+// import { RiStackFill } from 'react-icons/ri'
 
-import { DashboardActionsBar } from '../../../../components/organisms/dashboard'
-import { DashboardEmptyProjectList } from '../../../../components/organisms/dashboard'
-import { DashboardLoadingContent } from '../../../../components/organisms/dashboard/'
 import {
-  useGetAllProjectsQuery,
-  selectAllProjects
+  DashboardActionsBar,
+  DashboardEmptyProjectList,
+  DashboardLoadingContent
+} from '../../../../components/organisms/dashboard'
+import {
+  selectAllProjects,
+  useGetAllProjectsQuery
 } from '../../../../redux/apis'
-import { Projects } from './projects'
+import { ProjectsRender } from './projects-render'
 
 export default function Initial () {
-  const { projects, isLoading, currentData } = useGetAllProjectsQuery(undefined, {
-    selectFromResult: ({ data = { entities: {}, ids: [] }, ...rest }) => {
+  const { isLoading, projects } = useGetAllProjectsQuery(undefined, {
+    selectFromResult ({ data = { entities: {}, ids: [] }, ...rest }) {
       return {
         ...rest,
         projects: selectAllProjects(data)
@@ -18,20 +25,35 @@ export default function Initial () {
     }
   })
 
+  const menuConfig = useMemo(() => {
+    return {
+      menuButton: {
+        text: 'Criar',
+        icon: <HiPlusSm fontSize="1.2rem" />
+      },
+      menuList: [
+        {
+          text: 'Criar novo projeto',
+          icon: <MdInsertDriveFile fontSize="1.2rem" />,
+          onClick: () => {}
+        }
+      ]
+    }
+  }, [])
+
   if (isLoading) {
     return <DashboardLoadingContent />
   }
 
-  if (!projects.length && currentData) {
+  if (projects.length === 0) {
     return <DashboardEmptyProjectList />
   }
 
   return (
     <>
-      <DashboardActionsBar
-      />
+      <DashboardActionsBar menuConfig={menuConfig}/>
 
-      <Projects />
+     <ProjectsRender data={projects}/>
     </>
   )
 }

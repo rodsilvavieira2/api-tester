@@ -1,7 +1,3 @@
-import { HiPlusSm } from 'react-icons/hi'
-import { MdInsertDriveFile } from 'react-icons/md'
-import { RiStackFill } from 'react-icons/ri'
-
 import {
   Button,
   Flex,
@@ -12,13 +8,29 @@ import {
   MenuItem,
   MenuList
 } from '@chakra-ui/react'
+import { nanoid } from '@reduxjs/toolkit'
 
-import { DashBoardNavigationBar } from '../dashboard-navigation-bar'
 import { SearchInputWrapper } from './search-input-wrapper'
 import { SortByMenu } from './sort-by-menu'
 
-export const DashboardActionsBar = () => {
-  const onCreateNewProjectItem = () => { console.log('create') }
+type MenuConfig = {
+  menuButton: {
+    text: string
+    icon?: JSX.Element
+  }
+  menuList: {
+    text: string
+    icon?: JSX.Element
+    onClick: () => void
+  }[]
+}
+
+type DashboardActionsBarProps = {
+  menuConfig: MenuConfig
+}
+
+export const DashboardActionsBar = ({ menuConfig }: DashboardActionsBarProps) => {
+  const { menuButton, menuList } = menuConfig
 
   return (
     <Flex
@@ -33,30 +45,27 @@ export const DashboardActionsBar = () => {
       left="0"
       bg="background.primary"
     >
-      <DashBoardNavigationBar />
-
-      <HStack spacing={5} alignItems="center">
+      <HStack ml="auto" spacing={5} alignItems="center">
         <SortByMenu />
 
         <SearchInputWrapper />
 
         <Menu>
-          <MenuButton minW="5.5rem" rightIcon={<HiPlusSm />} as={Button}>
-            Criar
+          <MenuButton minW="5.5rem" rightIcon={menuButton.icon} as={Button}>
+            {menuButton.text}
           </MenuButton>
 
           <MenuList>
             <MenuGroup title="Novo">
-              <MenuItem icon={<MdInsertDriveFile fontSize="1.2rem" />}>
-                Documento de design
-              </MenuItem>
-
-              <MenuItem
-                onClick={onCreateNewProjectItem}
-                icon={<RiStackFill fontSize="1.2rem" />}
-              >
-                Coleção de request
-              </MenuItem>
+              {menuList.map((item) => (
+                <MenuItem
+                  key={nanoid()}
+                  icon={item.icon}
+                  onClick={item.onClick}
+                >
+                  {item.text}
+                </MenuItem>
+              ))}
             </MenuGroup>
           </MenuList>
         </Menu>
