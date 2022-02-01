@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-import { useCallback } from 'react'
 import { useSelector } from 'react-redux'
 
 import { SimpleGrid } from '@chakra-ui/react'
@@ -14,9 +12,6 @@ type ProjectsRenderProps = {
 }
 
 export const ProjectsRender = ({ data }: ProjectsRenderProps) => {
-  const onRename = useCallback(() => {}, [])
-  const onDelete = useCallback(() => {}, [])
-
   const searchValue = useSelector(selectSearchValue)
   const sortBy = useSelector(selectSortBy)
 
@@ -28,8 +23,6 @@ export const ProjectsRender = ({ data }: ProjectsRenderProps) => {
     <SimpleGrid gap="4" w="100%" p="6" minChildWidth="15.375rem">
       {sortedProjects.map((item) => (
         <ProjectCard
-          onDelete={onDelete}
-          onRename={onRename}
           key={item.id}
           {...item}
         />
