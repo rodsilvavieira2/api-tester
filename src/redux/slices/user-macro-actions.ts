@@ -38,7 +38,7 @@ type DecisionAction = {
   id: string | null
   type: DecisionActionType
   defaultValues?: Obj
-  isOpen: boolean
+  isOpen?: boolean
 }
 
 export type ToastData = {
@@ -88,7 +88,8 @@ const userMacroActionsSlice = createSlice({
       state.sortBy = action.payload
     },
     setDecisionAction: (state, action: PayloadAction<DecisionAction>) => {
-      state.decisionAction = action.payload
+      const { isOpen = true, ...rest } = action.payload
+      state.decisionAction = { isOpen, ...rest }
     },
     setToastData: (state, action: PayloadAction<ToastData | null>) => {
       if (action.payload) {

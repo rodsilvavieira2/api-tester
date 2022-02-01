@@ -2,6 +2,7 @@
 import { useMemo } from 'react'
 import { HiPlusSm } from 'react-icons/hi'
 import { MdInsertDriveFile } from 'react-icons/md'
+import { useDispatch } from 'react-redux'
 // import { RiStackFill } from 'react-icons/ri'
 
 import {
@@ -13,6 +14,7 @@ import {
   selectAllProjects,
   useGetAllProjectsQuery
 } from '../../../../redux/apis'
+import { setDecisionAction } from '../../../../redux/slices'
 import { ProjectsRender } from './projects-render'
 
 export default function Initial () {
@@ -25,6 +27,8 @@ export default function Initial () {
     }
   })
 
+  const appDispatch = useDispatch()
+
   const menuConfig = useMemo(() => {
     return {
       menuButton: {
@@ -35,11 +39,14 @@ export default function Initial () {
         {
           text: 'Criar novo projeto',
           icon: <MdInsertDriveFile fontSize="1.2rem" />,
-          onClick: () => {}
+          onClick: () => appDispatch(setDecisionAction({
+            id: null,
+            type: 'project.create'
+          }))
         }
       ]
     }
-  }, [])
+  }, [appDispatch])
 
   if (isLoading) {
     return <DashboardLoadingContent />
