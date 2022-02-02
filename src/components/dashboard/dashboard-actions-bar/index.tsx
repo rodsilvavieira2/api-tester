@@ -10,8 +10,8 @@ import {
 } from '@chakra-ui/react'
 import { nanoid } from '@reduxjs/toolkit'
 
-import { SearchInputWrapper } from './search-input-wrapper'
-import { SortByMenu } from './sort-by-menu'
+import { SearchInputContainer } from './search-input-container'
+import { SortByMenuContainer } from './sort-by-menu-container'
 
 type MenuConfig = {
   menuButton: {
@@ -36,8 +36,8 @@ export const DashboardActionsBar = ({ menuConfig }: DashboardActionsBarProps) =>
     <Flex
       borderBottom="1px solid"
       borderColor="border.primary"
-      py='4'
-      px='8'
+      py="4"
+      px="8"
       alignItems="center"
       justifyContent="space-between"
       position="sticky"
@@ -47,9 +47,9 @@ export const DashboardActionsBar = ({ menuConfig }: DashboardActionsBarProps) =>
       bg="background.primary"
     >
       <HStack ml="auto" spacing={5} alignItems="center">
-        <SortByMenu />
+        <SortByMenuContainer />
 
-        <SearchInputWrapper />
+        <SearchInputContainer />
 
         <Menu>
           <MenuButton minW="5.5rem" rightIcon={menuButton.icon} as={Button}>

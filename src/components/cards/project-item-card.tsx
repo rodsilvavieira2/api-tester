@@ -30,10 +30,10 @@ const MotionLink = motion(Link)
 type ProjectItemProps = {
   id: string
   name: string
-  onDelete: (id: string) => void
-  onRename: (id: string, name: string) => void
-  onDuplicate: (name: string) => void
   created_at: string
+  onDelete: (id: string) => void
+  onRename: (id: string, currentName: string) => void
+  onDuplicate: (name: string) => void
 }
 
 const Base = ({
