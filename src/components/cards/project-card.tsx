@@ -8,7 +8,6 @@ import {
   MdAccessTime
 } from 'react-icons/md'
 import { RiStackFill } from 'react-icons/ri'
-import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import {
@@ -25,36 +24,24 @@ import {
   Text
 } from '@chakra-ui/react'
 
-import { Project } from '../../../@types'
-import { setDecisionAction } from '../../../redux/slices'
+import { Project } from '../../@types'
 
 const MotionLink = motion(Link)
 
-type ProjectCardProps = & Pick<Project, 'id' | 'name' | 'created_at'>
+type ProjectCardProps = {
+  onDelete: (id: string) => void
+  onRename: (id: string, currentName: string) => void
+} & Pick<Project, 'id' | 'name' | 'created_at'>
 
 const Base = ({
   id,
   name,
-  created_at
+  created_at,
+  onDelete,
+  onRename
 }: ProjectCardProps) => {
   const cardRef = useRef<HTMLDivElement & HTMLAnchorElement>(null)
   const buttonWrapper = useRef<HTMLDivElement>(null)
-
-  const appDispatch = useDispatch()
-
-  const onRename = () => {
-    appDispatch(setDecisionAction({
-      id,
-      type: 'project.rename',
-      defaultValues: {
-        name
-      }
-    }))
-  }
-
-  const onDelete = () => {
-    console.log('delete', id)
-  }
 
   const onClick = (e: MouseEvent) => {
     if (buttonWrapper.current?.contains(e.target as any)) {
@@ -109,7 +96,7 @@ const Base = ({
 
               <MenuList>
                 <MenuItem
-                  onClick={onRename}
+                  onClick={() => onRename(id, name)}
                   icon={<MdDriveFileRenameOutline fontSize="1.2rem" />}
                 >
                   Renomear
@@ -118,7 +105,7 @@ const Base = ({
                 <MenuDivider />
 
                 <MenuItem
-                  onClick={onDelete}
+                  onClick={() => onDelete(id)}
                   icon={<MdDelete fontSize="1.2rem" />}
                   color="red.500"
                 >
