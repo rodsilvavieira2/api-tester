@@ -19,6 +19,7 @@ export function useSortBy<T extends SortByItem> ({
   sortBy
 }: UseSortByParams<T>) {
   return useMemo(() => {
+    console.log(data)
     const sortObj = {
       newest: () => {
         return data.sort((a, b) => {

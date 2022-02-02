@@ -1,23 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 
-import { JWTs, User } from '../../@types'
-import { baseQueryWithReAuth } from './util'
-
-type LoginCredentials = {
-  email: string
-  password: string
-}
-
-type CreateNewUserParams = {
-  fullName: string
-  email: string,
-  password: string
-}
-
-type AuthReturn = {
-  user: User,
-  tokens: JWTs
-}
+import { User } from '../../../@types'
+import { baseQueryWithReAuth } from '../util'
+import { AuthReturn, CreateNewUserParams, LoginParams } from './types'
 
 export const baseApi = createApi({
   reducerPath: 'baseApi',
@@ -27,7 +12,7 @@ export const baseApi = createApi({
     getUser: builder.mutation<User, void>({
       query: () => '/me'
     }),
-    login: builder.mutation<AuthReturn, LoginCredentials>({
+    login: builder.mutation<AuthReturn, LoginParams>({
       query: (body) => ({
         url: '/session',
         body,

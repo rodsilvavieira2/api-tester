@@ -63,7 +63,7 @@ const currentProjectIDtLocalStore =
   getOnStorage(localStorageKeys.currentProject, 'sessionStorage')
 
 const initialState: UserMacroActionsState = {
-  sortBy: 'newest',
+  sortBy: 'oldest',
   searchValue: '',
   toastData: null,
   decisionAction: {

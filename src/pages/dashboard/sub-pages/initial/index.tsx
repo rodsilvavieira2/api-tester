@@ -9,21 +9,13 @@ import {
   DashboardLoadingContent
 } from '../../../../components/organisms/dashboard'
 import {
-  selectAllProjects,
   useGetAllProjectsQuery
 } from '../../../../redux/apis'
 import { setDecisionAction } from '../../../../redux/slices'
 import { ProjectsRender } from './projects-render'
 
 export default function Initial () {
-  const { isLoading, projects } = useGetAllProjectsQuery(undefined, {
-    selectFromResult ({ data = { entities: {}, ids: [] }, ...rest }) {
-      return {
-        ...rest,
-        projects: selectAllProjects(data)
-      }
-    }
-  })
+  const { isLoading, data = [] } = useGetAllProjectsQuery()
 
   const appDispatch = useDispatch()
 
@@ -50,15 +42,15 @@ export default function Initial () {
     return <DashboardLoadingContent />
   }
 
-  if (projects.length === 0) {
+  if (data.length === 0) {
     return <DashboardEmptyProjectList />
   }
 
   return (
     <>
-      <DashboardActionsBar menuConfig={menuConfig}/>
+      <DashboardActionsBar menuConfig={menuConfig} />
 
-     <ProjectsRender data={projects}/>
+      <ProjectsRender data={data} />
     </>
   )
 }
