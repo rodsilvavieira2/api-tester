@@ -13,7 +13,7 @@ import {
   InputLeftElement
 } from '@chakra-ui/react'
 
-import { DefaultInputProps } from './molecules.types'
+import { DefaultInputProps } from './forms.types'
 
 type FormInputProps = { icon?: ReactElement } & DefaultInputProps
 

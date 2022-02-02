@@ -11,7 +11,7 @@ import {
   SignInForm,
   SingUpForm,
   SingUpFormFormData
-} from '../components/organisms/forms'
+} from '../components/auth-forms'
 import { useCreateNewUserMutation, useLoginMutation } from '../redux/apis'
 import { selectAccessToken, setShouldRememberMe } from '../redux/slices'
 import { AuthCodeErrors } from '../shared/errors'

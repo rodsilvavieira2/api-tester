@@ -7,7 +7,7 @@ import {
   DashboardActionsBar,
   DashboardEmptyProjectList,
   DashboardLoadingContent
-} from '../../../../components/organisms/dashboard'
+} from '../../../../components/dashboard'
 import {
   useGetAllProjectsQuery
 } from '../../../../redux/apis'

@@ -14,7 +14,7 @@ import {
   Text
 } from '@chakra-ui/react'
 
-import { User } from '../../../@types'
+import { User } from '../../@types'
 
 type DashboardHeaderProps = {
   onExit: () => void

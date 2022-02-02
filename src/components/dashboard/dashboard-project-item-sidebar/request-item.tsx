@@ -18,8 +18,8 @@ import {
   MenuDivider
 } from '@chakra-ui/react'
 
-import { ExplorerTreeNode } from '../../../../@types'
-import { RequestColorSchemes } from '../../../../shared'
+import { ExplorerTreeNode } from '../../../@types'
+import { RequestColorSchemes } from '../../../shared'
 
 export const RequestItem = ({ method, name }: ExplorerTreeNode) => {
   return (

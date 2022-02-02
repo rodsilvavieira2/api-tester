@@ -13,7 +13,7 @@ import {
   MenuList
 } from '@chakra-ui/react'
 
-import { RequestColors } from '../../../../shared'
+import { RequestColors } from '../../../shared'
 
 const methods = [
   'POST',

@@ -16,8 +16,8 @@ import {
 } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { FormInput } from '../../molecules'
-import { PasswordFormInput } from '../../molecules'
+import { FormInput } from '../forms'
+import { PasswordFormInput } from '../forms'
 import { formMessages } from './form.messages'
 
 export type SingUpFormFormData = {

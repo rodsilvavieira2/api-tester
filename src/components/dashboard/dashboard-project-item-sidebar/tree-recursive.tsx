@@ -1,4 +1,4 @@
-import { ExplorerTreeNode } from '../../../../@types'
+import { ExplorerTreeNode } from '../../../@types'
 import { Folder } from './folder'
 import { RequestItem } from './request-item'
 

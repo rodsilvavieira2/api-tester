@@ -23,8 +23,8 @@ import {
   Stack
 } from '@chakra-ui/react'
 
-import { ProjectItemDetails } from '../../../../@types'
-import { ProjectItemSearchInput } from '../../../molecules'
+import { ProjectItemDetails } from '../../../@types'
+import { ProjectItemSearchInput } from '../../forms'
 import { TreeRecursive } from './tree-recursive'
 
 type DashboardProjectItemSidebarProps = {

@@ -14,7 +14,7 @@ import {
   InputRightElement
 } from '@chakra-ui/react'
 
-import { DefaultInputProps } from './molecules.types'
+import { DefaultInputProps } from './forms.types'
 
 const Base: ForwardRefRenderFunction<
   HTMLInputElement,

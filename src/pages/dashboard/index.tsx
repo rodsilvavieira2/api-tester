@@ -5,8 +5,8 @@ import { Outlet, useNavigate } from 'react-router-dom'
 
 import { Box, Skeleton } from '@chakra-ui/react'
 
-import { DashboardHeader } from '../../components/organisms/dashboard'
-import { DashboardLoadingContent } from '../../components/organisms/dashboard'
+import { DashboardHeader } from '../../components/dashboard'
+import { DashboardLoadingContent } from '../../components/dashboard'
 import { useGetUserMutation } from '../../redux/apis'
 import { logout, selectAccessToken } from '../../redux/slices'
 import { ModalsController } from './modals-controller'

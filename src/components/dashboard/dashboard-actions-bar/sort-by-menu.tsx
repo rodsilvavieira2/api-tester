@@ -10,8 +10,8 @@ import {
   MenuItemOption
 } from '@chakra-ui/react'
 
-import { SortBy } from '../../../../@types'
-import { selectSortBy, setSortBy } from '../../../../redux/slices'
+import { SortBy } from '../../../@types'
+import { selectSortBy, setSortBy } from '../../../redux/slices'
 
 export const SortByMenu = () => {
   const sortBy = useSelector(selectSortBy)

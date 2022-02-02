@@ -10,7 +10,7 @@ import {
   DashboardProjectItemRequestManager,
   DashboardProjectItemRequestView,
   DashboardLoadingContent
-} from '../../../../components/organisms/dashboard'
+} from '../../../../components/dashboard'
 import { useGetProjectItemDetailsQuery } from '../../../../redux/apis/project-item-details-api-slice'
 import { ProjectItemNotFound } from './project-item-not-found'
 
