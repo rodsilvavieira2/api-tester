@@ -1,5 +1,4 @@
 import { TiArrowUnsorted } from 'react-icons/ti'
-import { useDispatch, useSelector } from 'react-redux'
 
 import {
   Menu,
@@ -11,21 +10,21 @@ import {
 } from '@chakra-ui/react'
 
 import { SortBy } from '../../../@types'
-import { selectSortBy, setSortBy } from '../../../redux/slices'
 
-export const SortByMenu = () => {
-  const sortBy = useSelector(selectSortBy)
+type SortByMenuProps = {
+  onChange: (sortType: SortBy) => void,
+  defaultValue: SortBy
+}
 
-  const appDispatch = useDispatch()
-
+export const SortByMenu = ({ defaultValue, onChange }: SortByMenuProps) => {
   return (
     <Menu>
       <MenuButton as={IconButton} icon={<TiArrowUnsorted />} />
 
       <MenuList>
         <MenuOptionGroup
-          defaultValue={sortBy}
-          onChange={(e) => appDispatch(setSortBy(e as SortBy))}
+          defaultValue={defaultValue}
+          onChange={(value) => onChange(value as SortBy)}
         >
           <MenuItemOption value="newest">Mais recentes</MenuItemOption>
 
