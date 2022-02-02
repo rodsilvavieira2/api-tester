@@ -9,6 +9,7 @@ import { DashboardHeader } from '../../components/dashboard'
 import { DashboardLoadingContent } from '../../components/dashboard'
 import { useGetUserMutation } from '../../redux/apis'
 import { logout, selectAccessToken } from '../../redux/slices'
+import { AlertsController } from './alerts-controller'
 import { ModalsController } from './modals-controller'
 import { ToastsController } from './toasts-controller'
 
@@ -55,6 +56,8 @@ export default function DashboardPage () {
       <ModalsController />
 
       <ToastsController />
+
+      <AlertsController />
     </Box>
   )
 }

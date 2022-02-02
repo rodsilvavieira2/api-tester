@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { HiPlusSm } from 'react-icons/hi'
 import { MdInsertDriveFile } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 
 import { DashboardActionsBar, MenuActionsConfig } from '../../../../components'
 import { useGetAllProjectItemsQuery } from '../../../../redux/apis'
-import { setDecisionAction } from '../../../../redux/slices'
+import { setDecisionAction, setSearchValue } from '../../../../redux/slices'
 import { ProjectItemsRenderContainer } from './project-items-render-container'
 
 type Params = {
@@ -19,6 +19,10 @@ export default function ProjectItems () {
   const { data = [], isLoading } = useGetAllProjectItemsQuery({ projectID: id })
 
   const appDispatch = useDispatch()
+
+  useEffect(() => {
+    appDispatch(setSearchValue(''))
+  }, [appDispatch])
 
   const actionsMenuConfig = useMemo((): MenuActionsConfig => {
     return {

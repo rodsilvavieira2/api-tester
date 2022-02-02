@@ -5,10 +5,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useUpdateEffect } from '@chakra-ui/react'
 
 import { MakeActionModal, MakeActionModalProps } from '../../components/modals'
-import { useProjectDecisionActions } from '../../hooks'
-import { ProjectDecisionActions, selectDecisionAction, setDecisionAction } from '../../redux/slices'
+import { useProjectItemsModals, useProjectModals } from '../../hooks'
+import {
+  ProjectDecisionActions,
+  ProjectItemDecisionActions,
+  selectDecisionAction,
+  setDecisionAction
+} from '../../redux/slices'
 
-type Sets = 'project'
+type Sets = 'project' | 'project_item'
 
 const initialState = {
   actionButtonText: '',
@@ -25,7 +30,8 @@ export const ModalsController = () => {
 
   const decisionAction = useSelector(selectDecisionAction)
 
-  const [projectActions] = useProjectDecisionActions()
+  const [createProjectModal] = useProjectModals()
+  const [createProjectItemModal] = useProjectItemsModals()
 
   useUpdateEffect(() => {
     const { id, type, defaultValues } = decisionAction
@@ -39,22 +45,32 @@ export const ModalsController = () => {
 
     const sets = {
       project: () => {
-        return projectActions({
+        return createProjectModal({
           id,
           type: type as ProjectDecisionActions,
+          defaultValues
+        })
+      },
+      project_item: () => {
+        return createProjectItemModal({
+          id,
+          type: type as ProjectItemDecisionActions,
           defaultValues
         })
       }
     }
 
     setCurrentModalsProps(sets[set]())
-  }, [decisionAction, projectActions])
+  }, [decisionAction, createProjectModal, createProjectItemModal])
 
-  const onClose = () => appDispatch(setDecisionAction({
-    id: null,
-    isOpen: false,
-    type: 'no-action'
-  }))
+  const onClose = () =>
+    appDispatch(
+      setDecisionAction({
+        id: null,
+        isOpen: false,
+        type: 'no-action'
+      })
+    )
 
   return (
     <>

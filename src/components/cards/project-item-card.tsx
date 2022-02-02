@@ -75,9 +75,6 @@ const Base = ({
       onClick={onClick}
       as={MotionLink}
       ref={cardRef}
-      whileHover={{
-        y: -15
-      }}
     >
       <Flex w="100%">
         <HStack w="50%" bg="#A0AEC0">

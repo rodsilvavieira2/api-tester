@@ -14,7 +14,7 @@ export const projectsHandles = [
         where: { owner: { id: { equals: user.id } } }
       })
 
-      return res(ctx.json(projects), ctx.delay(700))
+      return res(ctx.json(projects), ctx.delay(3000))
     })
   ),
   rest.post(
@@ -356,7 +356,7 @@ export const projectsHandles = [
       const projectItem = db.projectItems.findFirst({
         where: {
           id: {
-            equals: itemID
+            equals: String(itemID)
           }
         }
       })
@@ -365,7 +365,8 @@ export const projectsHandles = [
         return res(
           ctx.status(404),
           ctx.json({
-            code: 'project-item.not-found'
+            code: 'project-item.not-found',
+            itemID: String(itemID)
           })
         )
       }

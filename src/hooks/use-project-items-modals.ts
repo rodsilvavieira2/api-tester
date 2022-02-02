@@ -5,36 +5,33 @@ import { useToast } from '@chakra-ui/react'
 
 import { CustomError, Obj } from '../@types'
 import { MakeActionModalProps } from '../components/modals'
-import {
-  useCreateProjectMutation,
-  useUpdateProjectMutation
-} from '../redux/apis/project-api-slice.ts'
-import { ProjectDecisionActions } from '../redux/slices'
+import { useCreateProjectIemMutation, useUpdateProjectItemMutation } from '../redux/apis'
+import { ProjectItemDecisionActions } from '../redux/slices'
 import { ProjectCodeErrors } from '../shared/errors'
 
 type ActionParams = {
   id: string | null
-  type: ProjectDecisionActions
+  type: ProjectItemDecisionActions
   defaultValues?: Obj
 }
 
 type ActionReturn = Omit<MakeActionModalProps, 'onClose'>
 
-type UseProjectDecisionActionReturn = [(params: ActionParams) => ActionReturn]
+type UseProjectModalsItemsReturn = [(params: ActionParams) => ActionReturn]
 
-export const useProjectDecisionActions = (): UseProjectDecisionActionReturn => {
-  const [createProject] = useCreateProjectMutation()
-  const [updateProject] = useUpdateProjectMutation()
+export const useProjectItemsModals = (): UseProjectModalsItemsReturn => {
+  const [createProjectItem] = useCreateProjectIemMutation()
+  const [updateProjectItem] = useUpdateProjectItemMutation()
 
   const toast = useToast()
 
   const action = useCallback(
     ({ id, type, defaultValues }: ActionParams): ActionReturn => {
       const actions = {
-        'project.create': (): ActionReturn => {
+        'project_item.create': (): ActionReturn => {
           return {
-            actionButtonText: 'criar',
-            headerText: 'Criar novo projeto',
+            actionButtonText: 'Criar',
+            headerText: 'Criar novo item de projeto',
             isOpen: true,
             onAction: async (value: string) => {
               const toastID = toast({
@@ -46,11 +43,12 @@ export const useProjectDecisionActions = (): UseProjectDecisionActionReturn => {
               })
 
               try {
-                await createProject({ name: value }).unwrap()
+                if (!id) return undefined
+                await createProjectItem({ name: value, projectID: id }).unwrap()
 
                 toast({
                   title: 'Projeto',
-                  description: 'Novo projeto criado',
+                  description: 'Novo item projeto criado',
                   variant: 'left-accent',
                   isClosable: true,
                   status: 'success'
@@ -88,7 +86,7 @@ export const useProjectDecisionActions = (): UseProjectDecisionActionReturn => {
             }
           }
         },
-        'project.rename': (): ActionReturn => {
+        'project_item.rename': (): ActionReturn => {
           if (!id) {
             return {
               actionButtonText: '',
@@ -98,24 +96,34 @@ export const useProjectDecisionActions = (): UseProjectDecisionActionReturn => {
             }
           }
 
+          const { projectItemID } = defaultValues as { projectItemID : string}
+
+          return {
+            actionButtonText: 'renomear',
+            headerText: 'Renomar item de projeto',
+            isOpen: true,
+            onAction: async (value: string) => {
+              if (!id) return undefined
+              try {
+                await updateProjectItem({ name: value, projectID: id, projectItemID }).unwrap()
+              } catch (e) {
+              }
+            }
+          }
+        },
+        'project_item.duplicate': ():ActionReturn => {
           return {
             actionButtonText: 'renomear',
             headerText: 'Renomar projeto',
             isOpen: true,
-            defaultValue: defaultValues ? defaultValues.name as string : '',
-            onAction: async (value: string) => {
-              try {
-                await updateProject({ id, name: value }).unwrap()
-              } catch (e) {
-              }
-            }
+            onAction: async () => {}
           }
         }
       }
 
       return actions[type]()
     },
-    [createProject, toast, updateProject]
+    [createProjectItem, toast]
   )
 
   return [action]

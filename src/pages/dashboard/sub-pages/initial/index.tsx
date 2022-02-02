@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { HiPlusSm } from 'react-icons/hi'
 import { MdInsertDriveFile } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
@@ -10,13 +10,17 @@ import {
 import {
   useGetAllProjectsQuery
 } from '../../../../redux/apis'
-import { setDecisionAction } from '../../../../redux/slices'
+import { setDecisionAction, setSearchValue } from '../../../../redux/slices'
 import { ProjectRenderContainer } from './projects-render-container'
 
 export default function Initial () {
   const { isLoading, data = [], currentData } = useGetAllProjectsQuery()
 
   const appDispatch = useDispatch()
+
+  useEffect(() => {
+    appDispatch(setSearchValue(''))
+  }, [appDispatch])
 
   const menuConfig = useMemo(() => {
     return {

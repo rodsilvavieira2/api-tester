@@ -10,7 +10,6 @@ export type ProjectDecisionActions = 'project.create' | 'project.rename'
 export type ProjectItemDecisionActions =
   | 'project_item.create'
   | 'project_item.rename'
-  | 'project_item.delete'
   | 'project_item.duplicate'
 
 export type ProjectItemFolderDecisionActions =
@@ -50,11 +49,24 @@ export type ToastData = {
   status?: 'info' | 'warning' | 'success' | 'error'
 }
 
+export type ProjectAlertsTypes = 'project.delete'
+export type ProjectItemAlertsTypes = 'project_item.delete'
+
+type AlertTypes = ProjectAlertsTypes | ProjectItemAlertsTypes
+
+export type AlertData = {
+  id: string | null
+  type: AlertTypes | 'no-action'
+  defaultValues: Obj
+  isOpen: boolean
+}
+
 type UserMacroActionsState = {
   searchValue: string
   currentProjectID: string
   sortBy: SortBy
   decisionAction: DecisionAction
+  alertData: AlertData
   toastData: ToastData | null
 }
 
@@ -62,10 +74,20 @@ const currentProjectIDtLocalStore =
   getOnStorage(localStorageKeys.currentProject, 'localStorage') ||
   getOnStorage(localStorageKeys.currentProject, 'sessionStorage')
 
+const sortBy = (getOnStorage(localStorageKeys.sortBy, 'localStorage') ||
+  getOnStorage(localStorageKeys.sortBy, 'sessionStorage') ||
+  'oldest') as SortBy
+
 const initialState: UserMacroActionsState = {
-  sortBy: 'oldest',
+  sortBy: sortBy,
   searchValue: '',
   toastData: null,
+  alertData: {
+    id: null,
+    type: 'no-action',
+    isOpen: false,
+    defaultValues: {}
+  },
   decisionAction: {
     id: null,
     isOpen: false,
@@ -111,6 +133,21 @@ const userMacroActionsSlice = createSlice({
           variant
         }
       }
+    },
+    setAlertData: (
+      state,
+      action: PayloadAction<
+        Pick<AlertData, 'type'> & Partial<Omit<AlertData, 'type'>>
+      >
+    ) => {
+      const {
+        id = null,
+        isOpen = true,
+        defaultValues = {},
+        ...rest
+      } = action.payload
+
+      state.alertData = { id, isOpen, defaultValues, ...rest }
     }
   }
 })
@@ -122,7 +159,8 @@ export const {
   setCurrentProjectID,
   setSortBy,
   setDecisionAction,
-  setToastData
+  setToastData,
+  setAlertData
 } = userMacroActionsSlice.actions
 
 export const selectSearchValue = (state: RootState) =>
@@ -138,3 +176,6 @@ export const selectSortBy = (state: RootState) => state.userMacroActions.sortBy
 
 export const selectToastData = (state: RootState) =>
   state.userMacroActions.toastData
+
+export const selectAlertData = (state: RootState) =>
+  state.userMacroActions.alertData

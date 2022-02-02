@@ -37,7 +37,7 @@ export const projectsApiSlice = baseApi.injectEndpoints({
             (draft) => {
               const newState = draft.filter((item) => item.id !== id)
 
-              draft = newState
+              return newState
             }
           )
         )

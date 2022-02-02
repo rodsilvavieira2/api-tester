@@ -33,7 +33,6 @@ type RemoveOfStorageParams = {
 
 export function removeOfStorage ({ key, storageType }: RemoveOfStorageParams) {
   try {
-    console.log(storageType, 'type')
     window[storageType].removeItem(key)
   } catch {
     console.error(`error in remove item on ${storageType}`, key)

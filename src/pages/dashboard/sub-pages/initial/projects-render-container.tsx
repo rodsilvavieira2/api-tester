@@ -6,6 +6,7 @@ import { useSearch, useSortBy } from '../../../../hooks'
 import {
   selectSearchValue,
   selectSortBy,
+  setAlertData,
   setDecisionAction
 } from '../../../../redux/slices'
 import { ProjectsRender } from './projects-render'
@@ -42,9 +43,17 @@ export const ProjectRenderContainer = ({
     [appDispatch]
   )
 
-  const onDeleteProject = useCallback((id: string) => {
-    console.log('delete', id)
-  }, [])
+  const onDeleteProject = useCallback(
+    (id: string) => {
+      appDispatch(
+        setAlertData({
+          id,
+          type: 'project.delete'
+        })
+      )
+    },
+    [appDispatch]
+  )
 
   return (
     <ProjectsRender

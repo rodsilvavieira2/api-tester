@@ -1,11 +1,13 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 import { ProjectItem } from '../../../../@types'
 import { useSearch, useSortBy } from '../../../../hooks'
 import {
   selectSearchValue,
   selectSortBy,
+  setAlertData,
   setDecisionAction
 } from '../../../../redux/slices'
 import { ProjectItemsRender } from './project-items-render'
@@ -15,10 +17,16 @@ type ProjectItemsRenderContainerProps = {
   isLoading: boolean
 }
 
+type Params = {
+  id: string
+}
+
 export const ProjectItemsRenderContainer = ({
   data,
   isLoading
 }: ProjectItemsRenderContainerProps) => {
+  const { id: projectID } = useParams<Params>()
+
   const searchValue = useSelector(selectSearchValue)
   const sortBy = useSelector(selectSortBy)
 
@@ -44,14 +52,15 @@ export const ProjectItemsRenderContainer = ({
 
   const onDeleteProjectItem = useCallback(
     (id: string) => {
-      appDispatch(
-        setDecisionAction({
-          id,
-          type: 'project_item.delete'
-        })
-      )
+      appDispatch(setAlertData({
+        id,
+        type: 'project_item.delete',
+        defaultValues: {
+          projectID
+        }
+      }))
     },
-    [appDispatch]
+    [appDispatch, projectID]
   )
 
   const onDuplicateProjectItem = useCallback((name: string) => {

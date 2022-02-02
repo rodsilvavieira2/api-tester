@@ -39,7 +39,7 @@ export const projectItemsApiSlice = baseApi.injectEndpoints({
     }),
     deleteProjectItem: builder.mutation<void, DeleteProjectItemParams>({
       query: ({ projectID, projectItemID }) => ({
-        url: `projects/${projectID}/items/${projectItemID}}`,
+        url: `projects/${projectID}/items/${projectItemID}`,
         method: 'delete'
       }),
       invalidatesTags: (result, error, { projectItemID }) => {

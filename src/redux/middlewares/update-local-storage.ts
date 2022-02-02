@@ -32,6 +32,11 @@ export const UpdateLocalStorage: Middleware = (state) => (next) => (action) => {
       break
     }
 
+    case 'userMarcoActions/setSortBy' : {
+      saveOnStorage({ data: action.payload, key: localStorageKeys.sortBy, storageType })
+      break
+    }
+
     case 'auth/logout': {
       removeOfStorage({ key: localStorageKeys.accessToken, storageType })
 
