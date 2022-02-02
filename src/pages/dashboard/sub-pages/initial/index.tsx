@@ -12,7 +12,7 @@ import {
   useGetAllProjectsQuery
 } from '../../../../redux/apis'
 import { setDecisionAction } from '../../../../redux/slices'
-import { ProjectsRender } from './projects-render'
+import { ProjectRenderContainer } from './projects-render-container'
 
 export default function Initial () {
   const { isLoading, data = [] } = useGetAllProjectsQuery()
@@ -50,7 +50,7 @@ export default function Initial () {
     <>
       <DashboardActionsBar menuConfig={menuConfig} />
 
-      <ProjectsRender data={data} />
+      <ProjectRenderContainer data={data} />
     </>
   )
 }
