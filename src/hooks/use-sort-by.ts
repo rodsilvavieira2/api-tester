@@ -19,10 +19,10 @@ export function useSortBy<T extends SortByItem> ({
   sortBy
 }: UseSortByParams<T>) {
   return useMemo(() => {
-    console.log(data)
+    const currentData = data.slice()
     const sortObj = {
       newest: () => {
-        return data.sort((a, b) => {
+        return currentData.sort((a, b) => {
           if (dayjs(a.created_at).isAfter(b.created_at)) {
             return -1
           } else if (dayjs(a.created_at).isBefore(b.created_at)) {
@@ -33,7 +33,7 @@ export function useSortBy<T extends SortByItem> ({
         })
       },
       oldest: () => {
-        return data.sort((a, b) => {
+        return currentData.sort((a, b) => {
           if (dayjs(a.created_at).isAfter(b.created_at)) {
             return 1
           } else if (dayjs(a.created_at).isBefore(b.created_at)) {
@@ -44,7 +44,7 @@ export function useSortBy<T extends SortByItem> ({
         })
       },
       ascending: () => {
-        return data.sort((a, b) => {
+        return currentData.sort((a, b) => {
           if (a.name > b.name) {
             return 1
           } else if (a.name < b.name) {
@@ -55,7 +55,7 @@ export function useSortBy<T extends SortByItem> ({
         })
       },
       descending: () => {
-        return data.sort((a, b) => {
+        return currentData.sort((a, b) => {
           if (a.name > b.name) {
             return -1
           } else if (a.name < b.name) {
