@@ -1,29 +1,43 @@
-import { useSelector } from 'react-redux'
-
 import { Box, SimpleGrid } from '@chakra-ui/react'
 
 import { ProjectItem } from '../../../../@types'
-import { ProjectCard } from '../../../../components/organisms/cards'
-import { useSearch, useSortBy } from '../../../../hooks'
-import { selectSearchValue, selectSortBy } from '../../../../redux/slices'
+import { CardSkeletonByAmount, ProjectItemCard } from '../../../../components'
 
 type ProjectItemsRenderProps = {
+  onDeleteProjectItem: (id: string) => void
+  onRenameProjectITem: (id: string, name: string) => void
+  onDuplicateProjectItem: (name: string) => void
   data: ProjectItem[]
+  isLoading: boolean
 }
 
-export const ProjectItemsRender = ({ data }:ProjectItemsRenderProps) => {
-  const searchValue = useSelector(selectSearchValue)
-  const sortBy = useSelector(selectSortBy)
-
-  const searchedValues = useSearch({ data, searchValue })
-  const sortedValues = useSortBy({ data: searchedValues, sortBy })
-
+export const ProjectItemsRender = ({
+  data,
+  onDeleteProjectItem,
+  onDuplicateProjectItem,
+  onRenameProjectITem,
+  isLoading
+}: ProjectItemsRenderProps) => {
   return (
     <Box w="100%" h="calc(100vh - 9rem)" overflow="auto">
       <SimpleGrid gap="4" w="100%" p="6" minChildWidth="15.375rem">
-        {sortedValues.map((item) => (
-          <ProjectCard key={item.id} {...item} />
-        ))}
+        {isLoading
+          ? (
+          <CardSkeletonByAmount amount={10} />
+            )
+          : (
+          <>
+            {data.map((item) => (
+              <ProjectItemCard
+                onDelete={onDeleteProjectItem}
+                onRename={onRenameProjectITem}
+                onDuplicate={onDuplicateProjectItem}
+                key={item.id}
+                {...item}
+              />
+            ))}
+          </>
+            )}
       </SimpleGrid>
     </Box>
   )

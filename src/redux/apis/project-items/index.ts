@@ -4,8 +4,8 @@ import { GetProjectItemsParams, CreateNewProjectItemParams, UpdateProjectItemPar
 
 export const projectItemsApiSlice = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getProjectItems: builder.query<ProjectItem[], GetProjectItemsParams>({
-      query: ({ projectID }) => `/project/${projectID}/items`,
+    getAllProjectItems: builder.query<ProjectItem[], GetProjectItemsParams>({
+      query: ({ projectID }) => `/projects/${projectID}/items`,
       providesTags: (resp = []) => {
         return [
           ...resp.map(({ id }) => ({ type: 'project-items' as const, id })),
@@ -50,7 +50,7 @@ export const projectItemsApiSlice = baseApi.injectEndpoints({
 })
 
 export const {
-  useGetProjectItemsQuery,
+  useGetAllProjectItemsQuery,
   useCreateProjectIemMutation,
   useUpdateProjectItemMutation,
   useDeleteProjectItemMutation

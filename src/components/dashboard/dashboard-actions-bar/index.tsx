@@ -13,7 +13,7 @@ import { nanoid } from '@reduxjs/toolkit'
 import { SearchInputContainer } from './search-input-container'
 import { SortByMenuContainer } from './sort-by-menu-container'
 
-type MenuConfig = {
+export type MenuActionsConfig = {
   menuButton: {
     text: string
     icon?: JSX.Element
@@ -26,7 +26,7 @@ type MenuConfig = {
 }
 
 type DashboardActionsBarProps = {
-  menuConfig: MenuConfig
+  menuConfig: MenuActionsConfig
 }
 
 export const DashboardActionsBar = ({ menuConfig }: DashboardActionsBarProps) => {

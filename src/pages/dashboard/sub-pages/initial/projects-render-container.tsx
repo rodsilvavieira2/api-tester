@@ -11,11 +11,13 @@ import {
 import { ProjectsRender } from './projects-render'
 
 type ProjectRenderContainerProps = {
+  isLoading: boolean
   data: Project[]
 }
 
 export const ProjectRenderContainer = ({
-  data
+  data,
+  isLoading
 }: ProjectRenderContainerProps) => {
   const searchValue = useSelector(selectSearchValue)
   const sortBy = useSelector(selectSortBy)
@@ -49,6 +51,7 @@ export const ProjectRenderContainer = ({
       onDeleteProject={onDeleteProject}
       onRenameProject={onRenameProject}
       data={sortedValues}
+      isLoading={isLoading}
     />
   )
 }

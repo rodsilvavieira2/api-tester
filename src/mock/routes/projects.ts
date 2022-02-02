@@ -14,7 +14,7 @@ export const projectsHandles = [
         where: { owner: { id: { equals: user.id } } }
       })
 
-      return res(ctx.json(projects), ctx.delay(2000))
+      return res(ctx.json(projects), ctx.delay(700))
     })
   ),
   rest.post(
@@ -143,6 +143,44 @@ export const projectsHandles = [
     })
   ),
   // project/items
+  rest.get(
+    '/projects/:id/items',
+    authMiddleware(async (req, res, ctx) => {
+      const { id } = req.params as {id: string}
+
+      const project = db.projects.findFirst({
+        where: {
+          id: {
+            equals: id
+          }
+        }
+      })
+
+      if (!project) {
+        return res(
+          ctx.status(404),
+          ctx.json({
+            code: 'project.not-found'
+          })
+        )
+      }
+
+      const projectItems = db.projectItems.findMany({
+        where: {
+          project: {
+            id: {
+              equals: id
+            }
+          }
+        }
+      })
+
+      return res(
+        ctx.delay(500),
+        ctx.json(projectItems)
+      )
+    })
+  ),
   rest.post(
     '/projects/:id/items',
     authMiddleware(async (req, res, ctx) => {

@@ -5,8 +5,7 @@ import { useDispatch } from 'react-redux'
 
 import {
   DashboardActionsBar,
-  DashboardEmptyProjectList,
-  DashboardLoadingContent
+  DashboardEmptyProjectList
 } from '../../../../components/dashboard'
 import {
   useGetAllProjectsQuery
@@ -15,7 +14,7 @@ import { setDecisionAction } from '../../../../redux/slices'
 import { ProjectRenderContainer } from './projects-render-container'
 
 export default function Initial () {
-  const { isLoading, data = [] } = useGetAllProjectsQuery()
+  const { isLoading, data = [], currentData } = useGetAllProjectsQuery()
 
   const appDispatch = useDispatch()
 
@@ -38,11 +37,7 @@ export default function Initial () {
     }
   }, [appDispatch])
 
-  if (isLoading) {
-    return <DashboardLoadingContent />
-  }
-
-  if (data.length === 0) {
+  if (data.length === 0 && currentData) {
     return <DashboardEmptyProjectList />
   }
 
@@ -50,7 +45,7 @@ export default function Initial () {
     <>
       <DashboardActionsBar menuConfig={menuConfig} />
 
-      <ProjectRenderContainer data={data} />
+      <ProjectRenderContainer isLoading={isLoading} data={data} />
     </>
   )
 }

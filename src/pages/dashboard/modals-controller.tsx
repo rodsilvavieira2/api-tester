@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { useUpdateEffect } from '@chakra-ui/react'
 
-import { MakeActionModal, MakeActionModalProps } from '../../components/organisms/modals'
+import { MakeActionModal, MakeActionModalProps } from '../../components/modals'
 import { useProjectDecisionActions } from '../../hooks'
 import { ProjectDecisionActions, selectDecisionAction, setDecisionAction } from '../../redux/slices'
 

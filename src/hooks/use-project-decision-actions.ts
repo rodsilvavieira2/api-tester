@@ -4,7 +4,7 @@ import { useCallback } from 'react'
 import { useToast } from '@chakra-ui/react'
 
 import { CustomError, Obj } from '../@types'
-import { MakeActionModalProps } from '../components/organisms/modals'
+import { MakeActionModalProps } from '../components/modals'
 import {
   useCreateProjectMutation,
   useUpdateProjectMutation
