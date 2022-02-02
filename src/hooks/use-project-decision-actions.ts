@@ -104,51 +104,9 @@ export const useProjectDecisionActions = (): UseProjectDecisionActionReturn => {
             isOpen: true,
             defaultValue: defaultValues ? defaultValues.name as string : '',
             onAction: async (value: string) => {
-              const toastID = toast({
-                title: 'Projeto',
-                description: 'processando...',
-                variant: 'left-accent',
-                duration: null,
-                status: 'info'
-              })
               try {
                 await updateProject({ id, name: value }).unwrap()
-                toast({
-                  title: 'Projeto',
-                  description: 'Projeto renomeado',
-                  variant: 'left-accent',
-                  isClosable: true,
-                  status: 'success'
-                })
               } catch (e) {
-                const error = e as CustomError<ProjectCodeErrors>
-
-                const code = error.data?.code
-
-                switch (code) {
-                  case 'project.name-already-exists': {
-                    toast({
-                      title: 'Projeto',
-                      description: 'Nome de projeto em uso',
-                      variant: 'left-accent',
-                      isClosable: true,
-                      status: 'error'
-                    })
-                    break
-                  }
-
-                  default: {
-                    toast({
-                      title: 'Projeto',
-                      description: 'Desculpe, aconteceu um erro inesperado',
-                      variant: 'left-accent',
-                      isClosable: true,
-                      status: 'error'
-                    })
-                  }
-                }
-              } finally {
-                if (toastID) toast.close(toastID)
               }
             }
           }
