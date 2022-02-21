@@ -1,7 +1,7 @@
 const required = {
   email: 'É preciso informar um endereço de email',
   password: 'É preciso informar uma senha',
-  fullName: 'É preciso informa um nome completo'
+  fullName: 'É preciso informa um nome'
 }
 
 const invalid = {

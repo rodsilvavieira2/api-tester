@@ -6,17 +6,17 @@ import { useParams } from 'react-router-dom'
 
 import { DashboardActionsBar, MenuActionsConfig } from '../../../../components'
 import { useGetAllProjectItemsQuery } from '../../../../redux/apis'
-import { setDecisionAction, setSearchValue } from '../../../../redux/slices'
+import { setModalData, setSearchValue } from '../../../../redux/slices'
 import { ProjectItemsRenderContainer } from './project-items-render-container'
 
 type Params = {
-  id: string
+  projectID: string
 }
 
 export default function ProjectItems () {
-  const { id = '' } = useParams<Params>()
+  const { projectID = '' } = useParams<Params>()
 
-  const { data = [], isLoading } = useGetAllProjectItemsQuery({ projectID: id })
+  const { data = [], isLoading } = useGetAllProjectItemsQuery({ projectID })
 
   const appDispatch = useDispatch()
 
@@ -34,8 +34,8 @@ export default function ProjectItems () {
         {
           onClick: () => {
             appDispatch(
-              setDecisionAction({
-                id,
+              setModalData({
+                id: projectID,
                 type: 'project_item.create'
               })
             )
@@ -45,7 +45,7 @@ export default function ProjectItems () {
         }
       ]
     }
-  }, [appDispatch, id])
+  }, [appDispatch, projectID])
 
   return (
     <>

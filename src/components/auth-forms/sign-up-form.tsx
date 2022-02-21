@@ -21,14 +21,14 @@ import { PasswordFormInput } from '../forms'
 import { formMessages } from './form.messages'
 
 export type SingUpFormFormData = {
-  fullName: string
+  name: string
   password: string
   email: string
   rememberMe: boolean
 }
 
 const singUpFormValidation = yup.object().shape({
-  fullName: yup.string().required(formMessages.required.fullName),
+  name: yup.string().required(formMessages.required.fullName),
   password: yup
     .string()
     .required(formMessages.required.password)
@@ -78,10 +78,10 @@ export const SingUpForm = ({ onSubmit, onToggleMode }: SignFormProps) => {
             <HStack>
               <FormInput
                 icon={<MdPerson />}
-                error={errors.email}
+                error={errors.name}
                 label="Nome Completo:"
                 type="text"
-                {...register('fullName')}
+                {...register('name')}
               />
 
               <FormInput

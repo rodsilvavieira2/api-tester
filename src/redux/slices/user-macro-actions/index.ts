@@ -1,74 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { SortBy } from '../../@types'
-import { localStorageKeys } from '../../config'
-import { getOnStorage } from '../../utils/local-storage'
-import { RootState } from '../store'
-
-export type ProjectDecisionActions = 'project.create' | 'project.rename'
-
-export type ProjectItemDecisionActions =
-  | 'project_item.create'
-  | 'project_item.rename'
-  | 'project_item.duplicate'
-
-export type ProjectItemFolderDecisionActions =
-  | 'project_item_folder.create'
-  | 'project_item_folder.rename'
-  | 'project_item_folder.delete'
-  | 'project_item_folder.duplicate'
-
-export type ProjectItemRequestDecisionActions =
-  | 'project_item_request.create'
-  | 'project_item_request.rename'
-  | 'project_item_request.delete'
-  | 'project_item_request.duplicate'
-
-export type DecisionActionType =
-  | ProjectDecisionActions
-  | ProjectItemDecisionActions
-  | ProjectItemFolderDecisionActions
-  | ProjectItemRequestDecisionActions
-  | 'no-action'
-
-type Obj = Record<string, unknown>
-
-type DecisionAction = {
-  id: string | null
-  type: DecisionActionType
-  defaultValues?: Obj
-  isOpen?: boolean
-}
-
-export type ToastData = {
-  title: string
-  description: string
-  isClosable?: boolean
-  duration?: null | number
-  variant?: 'subtle' | 'solid' | 'left-accent' | 'top-accent'
-  status?: 'info' | 'warning' | 'success' | 'error'
-}
-
-export type ProjectAlertsTypes = 'project.delete'
-export type ProjectItemAlertsTypes = 'project_item.delete'
-
-type AlertTypes = ProjectAlertsTypes | ProjectItemAlertsTypes
-
-export type AlertData = {
-  id: string | null
-  type: AlertTypes | 'no-action'
-  defaultValues: Obj
-  isOpen: boolean
-}
-
-type UserMacroActionsState = {
-  searchValue: string
-  currentProjectID: string
-  sortBy: SortBy
-  decisionAction: DecisionAction
-  alertData: AlertData
-  toastData: ToastData | null
-}
+import { localStorageKeys } from '../../../config'
+import { getOnStorage } from '../../../utils/local-storage'
+import { RootState } from '../../store'
+import { AlertData, ModalData, SortBy, ToastData, UserMacroActionsState } from './types'
 
 const currentProjectIDtLocalStore =
   getOnStorage(localStorageKeys.currentProject, 'localStorage') ||
@@ -88,7 +23,7 @@ const initialState: UserMacroActionsState = {
     isOpen: false,
     defaultValues: {}
   },
-  decisionAction: {
+  modalData: {
     id: null,
     isOpen: false,
     type: 'no-action'
@@ -109,9 +44,12 @@ const userMacroActionsSlice = createSlice({
     setSortBy: (state, action: PayloadAction<SortBy>) => {
       state.sortBy = action.payload
     },
-    setDecisionAction: (state, action: PayloadAction<DecisionAction>) => {
-      const { isOpen = true, ...rest } = action.payload
-      state.decisionAction = { isOpen, ...rest }
+    setModalData: (
+      state,
+      action: PayloadAction<Omit<ModalData, 'id'> & Partial<Pick<ModalData, 'id'>>>
+    ) => {
+      const { id = null, isOpen = true, ...rest } = action.payload
+      state.modalData = { id, isOpen, ...rest }
     },
     setToastData: (state, action: PayloadAction<ToastData | null>) => {
       if (action.payload) {
@@ -158,7 +96,7 @@ export const {
   setSearchValue,
   setCurrentProjectID,
   setSortBy,
-  setDecisionAction,
+  setModalData,
   setToastData,
   setAlertData
 } = userMacroActionsSlice.actions
@@ -169,8 +107,8 @@ export const selectSearchValue = (state: RootState) =>
 export const selectCurrentProjectID = (state: RootState) =>
   state.userMacroActions.currentProjectID
 
-export const selectDecisionAction = (state: RootState) =>
-  state.userMacroActions.decisionAction
+export const selectModalData = (state: RootState) =>
+  state.userMacroActions.modalData
 
 export const selectSortBy = (state: RootState) => state.userMacroActions.sortBy
 

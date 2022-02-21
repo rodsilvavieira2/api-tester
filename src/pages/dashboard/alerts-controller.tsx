@@ -4,16 +4,23 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { useUpdateEffect } from '@chakra-ui/react'
 
-import { DefaultAlertDialog, DefaultAlertDialogProps } from '../../components/alerts'
-import { useProjectAlerts, useProjectItemAlerts } from '../../hooks'
+import {
+  DefaultAlertDialog,
+  DefaultAlertDialogProps
+} from '../../components/alerts'
+import {
+  useProjectAlerts,
+  useProjectItemAlerts,
+  useProjectItemFolderAlerts
+} from '../../hooks'
+import { selectAlertData, setAlertData } from '../../redux/slices'
 import {
   ProjectAlertsTypes,
   ProjectItemAlertsTypes,
-  selectAlertData,
-  setAlertData
-} from '../../redux/slices'
+  ProjectItemFolderAlertsTypes
+} from '../../redux/slices/user-macro-actions/types'
 
-type Sets = 'project' | 'project_item'
+type Sets = 'project' | 'project_item' | 'project_item_folder'
 
 type InitialState = Omit<DefaultAlertDialogProps, 'onClose'>
 
@@ -35,6 +42,7 @@ export const AlertsController = () => {
 
   const [createProjectAlert] = useProjectAlerts()
   const [createProjectItemAlert] = useProjectItemAlerts()
+  const [createProjectItemFolderAlert] = useProjectItemFolderAlerts()
 
   useUpdateEffect(() => {
     const { id, type, defaultValues } = alertData
@@ -58,6 +66,13 @@ export const AlertsController = () => {
         return createProjectItemAlert({
           id,
           type: type as ProjectItemAlertsTypes,
+          defaultValues
+        })
+      },
+      project_item_folder: () => {
+        return createProjectItemFolderAlert({
+          id,
+          type: type as ProjectItemFolderAlertsTypes,
           defaultValues
         })
       }

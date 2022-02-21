@@ -31,6 +31,7 @@ type ProjectItemProps = {
   id: string
   name: string
   created_at: string
+  projectID: string
   onDelete: (id: string) => void
   onRename: (id: string, currentName: string) => void
   onDuplicate: (name: string) => void
@@ -42,6 +43,7 @@ const Base = ({
   created_at,
   onDelete,
   onDuplicate,
+  projectID,
   onRename
 }: ProjectItemProps) => {
   const cardRef = useRef<HTMLDivElement & HTMLAnchorElement>(null)
@@ -66,12 +68,12 @@ const Base = ({
       h="250px"
       maxW="15.375rem"
       cursor="pointer"
-      transition='border 0.3s'
+      transition="border 0.3s"
       _hover={{
         borderColor: 'primary'
       }}
       bg="white"
-      to={`/dashboard/project-item/${id}`}
+      to={`/dashboard/project/${projectID}/items/${id}`}
       onClick={onClick}
       as={MotionLink}
       ref={cardRef}
@@ -92,7 +94,7 @@ const Base = ({
                 mr="3"
                 aria-label="mais opções"
                 as={IconButton}
-                size='sm'
+                size="sm"
                 ml="auto"
                 icon={<MdMoreHoriz />}
               />

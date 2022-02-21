@@ -7,6 +7,7 @@ type ProjectItemsRenderProps = {
   onDeleteProjectItem: (id: string) => void
   onRenameProjectITem: (id: string, name: string) => void
   onDuplicateProjectItem: (name: string) => void
+  projectID: string
   data: ProjectItem[]
   isLoading: boolean
 }
@@ -16,6 +17,7 @@ export const ProjectItemsRender = ({
   onDeleteProjectItem,
   onDuplicateProjectItem,
   onRenameProjectITem,
+  projectID,
   isLoading
 }: ProjectItemsRenderProps) => {
   return (
@@ -32,6 +34,7 @@ export const ProjectItemsRender = ({
                 onDelete={onDeleteProjectItem}
                 onRename={onRenameProjectITem}
                 onDuplicate={onDuplicateProjectItem}
+                projectID={projectID}
                 key={item.id}
                 {...item}
               />

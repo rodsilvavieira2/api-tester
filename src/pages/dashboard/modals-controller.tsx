@@ -5,15 +5,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useUpdateEffect } from '@chakra-ui/react'
 
 import { MakeActionModal, MakeActionModalProps } from '../../components/modals'
-import { useProjectItemsModals, useProjectModals } from '../../hooks'
 import {
-  ProjectDecisionActions,
-  ProjectItemDecisionActions,
-  selectDecisionAction,
-  setDecisionAction
-} from '../../redux/slices'
+  useProjectItemFolderModals,
+  useProjectItemsModals,
+  useProjectModals
+} from '../../hooks'
+import { selectModalData, setModalData } from '../../redux/slices'
+import { ProjectItemFolderModalTypes, ProjectItemModalTypes, ProjectModalTypes } from '../../redux/slices/user-macro-actions/types'
 
-type Sets = 'project' | 'project_item'
+type Sets = 'project' | 'project_item' | 'project_item_folder'
 
 const initialState = {
   actionButtonText: '',
@@ -28,45 +28,53 @@ export const ModalsController = () => {
   >(() => initialState)
   const appDispatch = useDispatch()
 
-  const decisionAction = useSelector(selectDecisionAction)
+  const modalData = useSelector(selectModalData)
 
   const [createProjectModal] = useProjectModals()
   const [createProjectItemModal] = useProjectItemsModals()
+  const [createProjectItemFolderModal] = useProjectItemFolderModals()
 
   useUpdateEffect(() => {
-    const { id, type, defaultValues } = decisionAction
+    const { id, type, defaultValues } = modalData
+    console.log(modalData)
 
     if (type === 'no-action') {
       setCurrentModalsProps(initialState)
       return undefined
     }
 
-    const [set] = decisionAction.type.split('.') as [Sets]
+    const [set] = modalData.type.split('.') as [Sets]
 
     const sets = {
       project: () => {
         return createProjectModal({
           id,
-          type: type as ProjectDecisionActions,
+          type: type as ProjectModalTypes,
           defaultValues
         })
       },
       project_item: () => {
         return createProjectItemModal({
           id,
-          type: type as ProjectItemDecisionActions,
+          type: type as ProjectItemModalTypes,
+          defaultValues
+        })
+      },
+      project_item_folder: () => {
+        return createProjectItemFolderModal({
+          id,
+          type: type as ProjectItemFolderModalTypes,
           defaultValues
         })
       }
     }
 
     setCurrentModalsProps(sets[set]())
-  }, [decisionAction, createProjectModal, createProjectItemModal])
+  }, [modalData, createProjectModal, createProjectItemModal])
 
   const onClose = () =>
     appDispatch(
-      setDecisionAction({
-        id: null,
+      setModalData({
         isOpen: false,
         type: 'no-action'
       })

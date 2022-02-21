@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import {
   Button,
@@ -12,7 +12,7 @@ import {
   ModalOverlay
 } from '@chakra-ui/react'
 
-import { DefaultModalProps } from './shared'
+import { DefaultModalProps } from './types'
 
 export type MakeActionModalProps = {
   headerText: string
@@ -30,11 +30,15 @@ const Content = ({
   actionButtonText,
   defaultValue
 }: ContentProps) => {
-  const [value, setValue] = useState(() => defaultValue ?? '')
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (inputRef.current) inputRef.current.value = defaultValue ?? ''
+  }, [defaultValue])
 
   const onClick = () => {
     onClose()
-    onAction(value)
+    if (inputRef.current) onAction(inputRef.current.value)
   }
 
   return (
@@ -44,8 +48,7 @@ const Content = ({
 
       <ModalBody>
         <Input
-          value={value}
-          onChange={(e) => setValue(e.currentTarget.value)}
+          ref={inputRef}
         />
       </ModalBody>
 

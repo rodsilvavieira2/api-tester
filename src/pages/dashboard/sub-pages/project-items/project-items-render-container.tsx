@@ -8,7 +8,7 @@ import {
   selectSearchValue,
   selectSortBy,
   setAlertData,
-  setDecisionAction
+  setModalData
 } from '../../../../redux/slices'
 import { ProjectItemsRender } from './project-items-render'
 
@@ -18,14 +18,14 @@ type ProjectItemsRenderContainerProps = {
 }
 
 type Params = {
-  id: string
+  projectID: string
 }
 
 export const ProjectItemsRenderContainer = ({
   data,
   isLoading
 }: ProjectItemsRenderContainerProps) => {
-  const { id: projectID } = useParams<Params>()
+  const { projectID } = useParams<Params>()
 
   const searchValue = useSelector(selectSearchValue)
   const sortBy = useSelector(selectSortBy)
@@ -38,16 +38,17 @@ export const ProjectItemsRenderContainer = ({
   const onRenameProjectItem = useCallback(
     (id: string, name: string) => {
       appDispatch(
-        setDecisionAction({
+        setModalData({
           id,
           type: 'project_item.rename',
           defaultValues: {
+            projectID,
             name
           }
         })
       )
     },
-    [appDispatch]
+    [appDispatch, projectID]
   )
 
   const onDeleteProjectItem = useCallback(
@@ -72,6 +73,7 @@ export const ProjectItemsRenderContainer = ({
       onDeleteProjectItem={onDeleteProjectItem}
       onRenameProjectITem={onRenameProjectItem}
       onDuplicateProjectItem={onDuplicateProjectItem}
+      projectID={projectID as string}
       isLoading={isLoading}
       data={sortedValues}
     />

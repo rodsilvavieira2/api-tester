@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { DefaultAlertDialogProps } from '../components/alerts'
 import { useDeleteProjectMutation } from '../redux/apis'
-import { AlertData, ProjectAlertsTypes } from '../redux/slices'
+import { ProjectAlertsTypes, AlertData } from '../redux/slices/user-macro-actions/types'
 
 type AlertParams = { type: ProjectAlertsTypes } & Omit<
   AlertData,
@@ -26,11 +26,9 @@ export const useProjectAlerts = (): UseProjectAlertsReturn => {
             actionButtonText: 'Deletar',
             isOpen: true,
             onAction: async () => {
-              try {
-                if (!id) return undefined
+              if (!id) return undefined
 
-                deleteProject({ id }).unwrap()
-              } catch {}
+              deleteProject({ id })
             }
           }
         }

@@ -6,10 +6,10 @@ import { AuthReturn, CreateNewUserParams, LoginParams } from './types'
 
 export const baseApi = createApi({
   reducerPath: 'baseApi',
-  tagTypes: ['user', 'projects', 'project-items', 'project-item-details'],
+  tagTypes: ['user', 'projects', 'project-items', 'project-item-explore'],
   baseQuery: baseQueryWithReAuth,
   endpoints: (builder) => ({
-    getUser: builder.mutation<User, void>({
+    getUser: builder.query<User, void>({
       query: () => '/me'
     }),
     login: builder.mutation<AuthReturn, LoginParams>({
@@ -21,7 +21,7 @@ export const baseApi = createApi({
     }),
     createNewUser: builder.mutation<AuthReturn, CreateNewUserParams>({
       query: (body) => ({
-        url: '/new-user',
+        url: '/signup',
         body,
         method: 'post'
       })
@@ -29,4 +29,5 @@ export const baseApi = createApi({
   })
 })
 
-export const { useGetUserMutation, useLoginMutation, useCreateNewUserMutation } = baseApi
+export const { useGetUserQuery, useLoginMutation, useCreateNewUserMutation } =
+  baseApi

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
 
-import { SortBy } from '../@types'
+import { SortBy } from '../redux/slices/user-macro-actions/types'
 
 type SortByItem = {
   id: string

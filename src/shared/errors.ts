@@ -9,5 +9,5 @@ export type ProjectCodeErrors =
   | 'project.server-error'
 
 export type AuthCodeErrors =
-  | 'auth.invalid-credentials'
-  | 'auth.email-in-user'
+  | 'auth.invalid_credentials'
+  | 'auth.email_already_exists'

@@ -7,7 +7,7 @@ import {
   selectSearchValue,
   selectSortBy,
   setAlertData,
-  setDecisionAction
+  setModalData
 } from '../../../../redux/slices'
 import { ProjectsRender } from './projects-render'
 
@@ -31,7 +31,7 @@ export const ProjectRenderContainer = ({
   const onRenameProject = useCallback(
     (id: string, name: string) => {
       appDispatch(
-        setDecisionAction({
+        setModalData({
           id,
           type: 'project.rename',
           defaultValues: {

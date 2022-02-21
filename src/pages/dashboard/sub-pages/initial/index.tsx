@@ -10,7 +10,7 @@ import {
 import {
   useGetAllProjectsQuery
 } from '../../../../redux/apis'
-import { setDecisionAction, setSearchValue } from '../../../../redux/slices'
+import { setModalData, setSearchValue } from '../../../../redux/slices'
 import { ProjectRenderContainer } from './projects-render-container'
 
 export default function Initial () {
@@ -32,8 +32,7 @@ export default function Initial () {
         {
           text: 'Criar novo projeto',
           icon: <MdInsertDriveFile fontSize="1.2rem" />,
-          onClick: () => appDispatch(setDecisionAction({
-            id: null,
+          onClick: () => appDispatch(setModalData({
             type: 'project.create'
           }))
         }

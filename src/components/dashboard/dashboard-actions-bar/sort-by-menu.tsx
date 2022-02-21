@@ -9,7 +9,7 @@ import {
   MenuItemOption
 } from '@chakra-ui/react'
 
-import { SortBy } from '../../../@types'
+import { SortBy } from '../../../redux/slices/user-macro-actions/types'
 
 type SortByMenuProps = {
   onChange: (sortType: SortBy) => void,

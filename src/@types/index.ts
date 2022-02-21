@@ -9,7 +9,7 @@ export type Obj = Record<string, unknown>
 
 export type User = {
   id: ID
-  fullName: string
+  name: string
   email: string
   avatarURL: string | null
 } & DateIndicators
@@ -32,7 +32,7 @@ export type JWTs = {
 }
 
 export type HttpMethods =
-  | 'POST'
+   'POST'
   | 'GET'
   | 'PUT'
   | 'PATCH'
@@ -42,13 +42,11 @@ export type HttpMethods =
 
 export type CustomError<T> = {
   status: number
-  data?: {
-    code?: T
-    message?: string
+  data: {
+    code: T
+    message: string
   }
 }
-
-export type SortBy = 'newest' | 'oldest' | 'ascending' | 'descending'
 
 export type ExplorerTreeNode = {
   id: string,

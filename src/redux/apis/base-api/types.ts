@@ -10,8 +10,6 @@ export type AuthReturn = {
   tokens: JWTs
 }
 
-export type CreateNewUserParams = {
-  fullName: string
-  email: string
+export type CreateNewUserParams = Pick<User, 'name' | 'email'> & {
   password: string
 }

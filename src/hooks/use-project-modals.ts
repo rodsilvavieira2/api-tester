@@ -8,13 +8,13 @@ import { MakeActionModalProps } from '../components/modals'
 import {
   useCreateProjectMutation,
   useUpdateProjectMutation
-} from '../redux/apis/project-api-slice.ts'
-import { ProjectDecisionActions } from '../redux/slices'
+} from '../redux/apis/project-api-slice'
+import { ProjectModalTypes } from '../redux/slices/user-macro-actions/types'
 import { ProjectCodeErrors } from '../shared/errors'
 
 type ActionParams = {
   id: string | null
-  type: ProjectDecisionActions
+  type: ProjectModalTypes
   defaultValues?: Obj
 }
 
@@ -104,10 +104,7 @@ export const useProjectModals = (): UseProjectModalsReturn => {
             isOpen: true,
             defaultValue: defaultValues ? defaultValues.name as string : '',
             onAction: async (value: string) => {
-              try {
-                await updateProject({ id, name: value }).unwrap()
-              } catch (e) {
-              }
+              updateProject({ id, name: value })
             }
           }
         }

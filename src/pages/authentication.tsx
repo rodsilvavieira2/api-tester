@@ -15,6 +15,7 @@ import {
 import { useCreateNewUserMutation, useLoginMutation } from '../redux/apis'
 import { selectAccessToken, setShouldRememberMe } from '../redux/slices'
 import { AuthCodeErrors } from '../shared/errors'
+import { isCustomError } from '../utils/assets'
 
 export default function AuthenticationPage () {
   const [isInSignUpMode, setIsInSignUpMode] = useState(false)
@@ -42,21 +43,15 @@ export default function AuthenticationPage () {
       try {
         appDispatch(setShouldRememberMe(data.rememberMe))
         await onSingUp({ ...data }).unwrap()
-
-        navigation('/dashboard')
       } catch (e) {
         appDispatch(setShouldRememberMe(false))
 
-        const error = e as CustomError<AuthCodeErrors>
-
-        const code = error.data?.code
-
-        if (code) {
-          switch (code) {
-            case 'auth.email-in-user': {
+        if (isCustomError<AuthCodeErrors>(e)) {
+          switch (e.data.code) {
+            case 'auth.email_already_exists': {
               toast({
                 title: 'Autenticação',
-                description: 'Esse email em uso',
+                description: 'Esse endereço de email já está em uso por outra pessoa',
                 isClosable: true,
                 variant: 'left-accent',
                 status: 'error'
@@ -76,7 +71,7 @@ export default function AuthenticationPage () {
         }
       }
     },
-    [appDispatch, navigation, onSingUp, toast]
+    [appDispatch, onSingUp, toast]
   )
 
   const onSignInSubmit = useCallback(
@@ -84,8 +79,6 @@ export default function AuthenticationPage () {
       try {
         appDispatch(setShouldRememberMe(data.rememberMe))
         await onSignIn({ ...data }).unwrap()
-
-        navigation('/dashboard')
       } catch (e) {
         appDispatch(setShouldRememberMe(false))
 
@@ -95,7 +88,7 @@ export default function AuthenticationPage () {
 
         if (code) {
           switch (code) {
-            case 'auth.invalid-credentials': {
+            case 'auth.invalid_credentials': {
               toast({
                 title: 'Autenticação',
                 description: 'Email ou senha invalido',
@@ -118,7 +111,7 @@ export default function AuthenticationPage () {
         }
       }
     },
-    [appDispatch, navigation, onSignIn, toast]
+    [appDispatch, onSignIn, toast]
   )
   if (accessToken) return null
 

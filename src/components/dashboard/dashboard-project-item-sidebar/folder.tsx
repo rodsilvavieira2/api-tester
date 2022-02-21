@@ -1,12 +1,5 @@
 import { useState } from 'react'
 import { FaFolderMinus, FaFolderOpen } from 'react-icons/fa'
-import { HiPlus } from 'react-icons/hi'
-import {
-  MdArrowDropDown,
-  MdContentCopy,
-  MdDelete,
-  MdSettings
-} from 'react-icons/md'
 
 import {
   Box,
@@ -15,21 +8,18 @@ import {
   Icon,
   Text,
   Flex,
-  Menu,
-  MenuButton,
-  IconButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
   Stack
 } from '@chakra-ui/react'
 
+import { FolderMenuActionsContainer } from './folder-menu-actions-container'
+
 type FolderProps = {
+  id: string
   name: string
   children: JSX.Element | JSX.Element[]
 }
 
-export const Folder = ({ name, children }: FolderProps) => {
+export const Folder = ({ name, children, id }: FolderProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const onToggleFolder = () => setIsOpen((prev) => !prev)
@@ -50,27 +40,7 @@ export const Folder = ({ name, children }: FolderProps) => {
           </Text>
         </HStack>
 
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            icon={<MdArrowDropDown fontSize="1.5rem" />}
-            variant="ghost"
-            size="xl"
-          />
-
-          <MenuList>
-            <MenuItem icon={<HiPlus />}>Nova requisição</MenuItem>
-            <MenuDivider />
-
-            <MenuItem icon={<MdContentCopy />}>Duplicar</MenuItem>
-
-            <MenuItem icon={<MdDelete />}>Deletar</MenuItem>
-
-            <MenuDivider />
-
-            <MenuItem icon={<MdSettings />}>Configurações</MenuItem>
-          </MenuList>
-        </Menu>
+        <FolderMenuActionsContainer folderID={id} />
       </Flex>
 
       <Collapse

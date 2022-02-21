@@ -18,10 +18,10 @@ import { User } from '../../@types'
 
 type DashboardHeaderProps = {
   onExit: () => void
-} & Pick<User, 'avatarURL' | 'fullName'>
+} & Pick<User, 'avatarURL' | 'name'>
 
 export const DashboardHeader = ({
-  fullName,
+  name,
   avatarURL,
   onExit
 }: DashboardHeaderProps) => {
@@ -51,7 +51,7 @@ export const DashboardHeader = ({
 
         <Menu>
           <MenuButton>
-            <Avatar name={fullName} src={avatarURL || undefined} />
+            <Avatar name={name} src={avatarURL || undefined} />
           </MenuButton>
 
           <MenuList>

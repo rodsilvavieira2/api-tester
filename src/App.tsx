@@ -11,6 +11,7 @@ const DashboardPage = lazy(() => import('./pages/dashboard'))
 
 const InitialPage = lazy(() => import('./pages/dashboard/sub-pages/initial'))
 const ProjectItemsPage = lazy(() => import('./pages/dashboard/sub-pages/project-items'))
+const ProjectItemPage = lazy(() => import('./pages/dashboard/sub-pages/project-item'))
 
 export const App = () => {
   return (
@@ -22,8 +23,10 @@ export const App = () => {
           <Route path="/dashboard" element={<DashboardPage />}>
             <Route index element={<InitialPage />} />
 
-            <Route path="project/:id" element={<ProjectItemsPage />} />
-          </Route>
+            <Route path="project/:projectID" element={<ProjectItemsPage />} />
+
+            <Route path='project/:projectID/items/:projectItemID' element={<ProjectItemPage />} />
+           </Route>
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

@@ -11,7 +11,10 @@ export const store = configureStore({
     userMacroActions: userMacroActionsReducer
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(baseApi.middleware, UpdateLocalStorage)
+    getDefaultMiddleware().concat(
+      baseApi.middleware,
+      UpdateLocalStorage
+    )
 })
 
 export type RootState = ReturnType<typeof store.getState>

@@ -10,7 +10,7 @@ import { logout, setTokens } from '../slices/auth'
 import { RootState } from '../store'
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:3000',
+  baseUrl: 'http://localhost:8080/api',
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.tokens.accessToken
 

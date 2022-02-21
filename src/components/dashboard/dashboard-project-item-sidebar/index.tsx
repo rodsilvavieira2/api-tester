@@ -1,9 +1,6 @@
-import { memo, useMemo } from 'react'
-import { HiPlusSm } from 'react-icons/hi'
+import { memo } from 'react'
 import {
   MdArrowDropDown,
-  MdFolder,
-  MdOutlineSend,
   MdSettings
 } from 'react-icons/md'
 
@@ -11,7 +8,6 @@ import {
   Box,
   Button,
   Flex,
-  IconButton,
   Menu,
   MenuButton,
   MenuDivider,
@@ -23,25 +19,11 @@ import {
   Stack
 } from '@chakra-ui/react'
 
-import { ProjectItemDetails } from '../../../@types'
 import { ProjectItemSearchInput } from '../../forms'
-import { TreeRecursive } from './tree-recursive'
+import { ExploreTreeContainer } from './explore-tree-container'
+import { ProjectItemMenuActionsContainer } from './project-item-menu-actions-container'
 
-type DashboardProjectItemSidebarProps = {
-  onNewFolder: () => void
-  onNewRequisition: () => void
-  details: ProjectItemDetails
-}
-
-const Base = ({
-  details: { explore },
-  onNewFolder,
-  onNewRequisition
-}: DashboardProjectItemSidebarProps) => {
-  const tree = useMemo(() => {
-    return <TreeRecursive data={explore} />
-  }, [explore])
-
+const Base = () => {
   return (
     <Stack
       as="aside"
@@ -87,30 +69,10 @@ const Base = ({
       <Flex>
         <ProjectItemSearchInput size="sm" />
 
-        <Menu>
-          <MenuButton size="sm" as={IconButton} ml="6" icon={<HiPlusSm />} />
-
-          <MenuList>
-            <MenuItem
-              onClick={onNewRequisition}
-              icon={<MdOutlineSend fontSize="1.3rem" />}
-            >
-              Nova requisição
-            </MenuItem>
-
-            <MenuItem
-              onClick={onNewFolder}
-              icon={<MdFolder fontSize="1.3rem" />}
-            >
-              Nova Pasta
-            </MenuItem>
-          </MenuList>
-        </Menu>
+        <ProjectItemMenuActionsContainer />
       </Flex>
 
-      <Stack p="1" spacing="3" maxH="100%" overflowY="auto">
-          {tree}
-      </Stack>
+     <ExploreTreeContainer/>
     </Stack>
   )
 }
