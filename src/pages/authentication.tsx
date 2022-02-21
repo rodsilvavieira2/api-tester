@@ -82,16 +82,12 @@ export default function AuthenticationPage () {
       } catch (e) {
         appDispatch(setShouldRememberMe(false))
 
-        const error = e as CustomError<AuthCodeErrors>
-
-        const code = error.data?.code
-
-        if (code) {
-          switch (code) {
+        if (isCustomError<AuthCodeErrors>(e)) {
+          switch (e.data.code) {
             case 'auth.invalid_credentials': {
               toast({
                 title: 'Autenticação',
-                description: 'Email ou senha invalido',
+                description: 'Email ou senha invalidos',
                 isClosable: true,
                 variant: 'left-accent',
                 status: 'error'
